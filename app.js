@@ -9,6 +9,7 @@ const path = require('path');
 require('dotenv').config();
 
 /*------------------------------- Routers-------------------------------*/
+const storeRouter = require("./Routers/storeRouter")
 
 /*------------------------------- Images-------------------------------*/
 //image variable
@@ -77,7 +78,7 @@ app.use(body_parser.json());
 app.use(body_parser.urlencoded({extended:false})); 
 
 /*------------------------------- RoutersMiddleWares-------------------------------*/
-
+app.use(storeRouter)
 
 //Not found MW
 app.use((request, response) => {
