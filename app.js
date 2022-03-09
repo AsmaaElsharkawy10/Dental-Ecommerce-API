@@ -1,36 +1,37 @@
 /*------------------------------- Importing-------------------------------*/
 //Importing
-const express = require('express');
-const body_parser = require('body-parser');
-const cors = require('cors');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
-const path = require('path');
-require('dotenv').config();
+const express = require("express");
+const body_parser = require("body-parser");
+const cors = require("cors");
+const morgan = require("morgan");
+const mongoose = require("mongoose");
+const path = require("path");
+require("dotenv").config();
 
 /*------------------------------- Routers-------------------------------*/
+const customerRouter = require("./Routers/customerRouter");
 
 /*------------------------------- Images-------------------------------*/
 //image variable
-const multer = require('multer');
+const multer = require("multer");
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, path.join(__dirname, 'images'));
+    callback(null, path.join(__dirname, "images"));
   },
   filename: (req, file, callback) => {
     callback(
       null,
-      new Date().toLocaleDateString().replace(/\//g, '-') +
-        '-' +
+      new Date().toLocaleDateString().replace(/\//g, "-") +
+        "-" +
         file.originalname
     );
   },
 });
 const fileFilter = (req, file, callback) => {
   if (
-    file.mimetype == 'image/jpeg' ||
-    file.mimetype == 'image/jpg' ||
-    file.mimetype == 'image/png'
+    file.mimetype == "image/jpeg" ||
+    file.mimetype == "image/jpg" ||
+    file.mimetype == "image/png"
   )
     callback(null, true);
   else callback(null, false);
@@ -40,12 +41,12 @@ const fileFilter = (req, file, callback) => {
 
 const app = express();
 app.use((request, response, next) => {
-  response.header('Access-Control-Allow-Origin', '*');
+  response.header("Access-Control-Allow-Origin", "*");
   response.header(
-    'Access-Control-Allow-Methods',
-    'GET,POST,DELETE,PUT,OPTIONS'
+    "Access-Control-Allow-Methods",
+    "GET,POST,DELETE,PUT,OPTIONS"
   );
-  response.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  response.header("Access-Control-Allow-Headers", "Content-Type,Authorization");
   next();
 });
 
@@ -54,7 +55,7 @@ app.use((request, response, next) => {
 mongoose
   .connect(process.env.DB_URI)
   .then(() => {
-    console.log('connected to lifeSystemDB');
+    console.log("connected to lifeSystemDB");
     //listening on port
     const port = process.env.PORT || 8080;
     app.listen(port, () => {
@@ -66,27 +67,27 @@ mongoose
 /*------------------------------- MiddelWares-------------------------------*/
 
 app.use((req, res, next) => {
-  morgan(':method :url :status');
+  morgan(":method :url :status");
   next();
 });
 
-app.use("/Images",express.static(path.join(__dirname,"Images")))
-app.use(multer({storage,fileFilter}).single("image"));
+app.use("/Images", express.static(path.join(__dirname, "Images")));
+app.use(multer({ storage, fileFilter }).single("image"));
 app.use(cors());
 app.use(body_parser.json());
-app.use(body_parser.urlencoded({extended:false})); 
+app.use(body_parser.urlencoded({ extended: false }));
 
 /*------------------------------- RoutersMiddleWares-------------------------------*/
-
+app.use("/", customerRouter);
 
 //Not found MW
 app.use((request, response) => {
-  response.status(404).json({ data: 'Not Fond' });
+  response.status(404).json({ data: "Not Fond" });
 });
 
 //Error MW
 app.use((error, request, response, next) => {
   //JS  code function.length
   let status = error.status || 500;
-  response.status(status).json({ Error: error + '' });
+  response.status(status).json({ Error: error + "" });
 });
