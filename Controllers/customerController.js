@@ -24,13 +24,14 @@ module.exports = {
     }
   }, //get all or one customer
 
-  addCustomer: async (req, res, next) => {
+  addCustomer:(req, res, next) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
-      let error = new Error();
-      error.status = 422;
+      let error=new Error();
+      error.status=422;
+      error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
       throw error;
-    } 
+    }
         let {
           customerPassword,
           customerPhone,
@@ -57,19 +58,22 @@ module.exports = {
             customerAddresses,
             role,
           });
-          await customer.save()
+          customer.save()
           .then(data=>res.status(200).json({message:"added",data}))
-          .catch(error=>next(error +"cannot add customer")); 
+          .catch(error=>next(error+"cannot add customer")); 
+      
+
   }, //add customer
 
-  updateCustomer: () => async (req, res, next) => {
+  updateCustomer:(req, res, next) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
-      let error = new Error();
-      error.status = 422;
+      let error=new Error();
+      error.status=422;
+      error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
       throw error;
     }
-    Customers.findByIdAndUpdate(req.body._id, {
+    Customers.updateOne({_id:req.body._id}, {
       $set: {
         customerPassword: req.body.customerPassword,
         customerPhone: req.body.customerPhone,
@@ -80,17 +84,17 @@ module.exports = {
         Orders: req.body.Orders,
         customerAddresses: req.body.customerAddresses,
         role: req.body.role,
-      },
+      }
     })
       .then((data) => {
-        if (data == null) throw new Error("customer Is not Found!");
+        if (data == null) throw new Error("cannot update this customer");
         res.status(200).json({ message: "updated", data });
       })
       .catch((error) => next(error));
   },
 
   
-  deleteCustomer:(req,res,next)=>{
+  deleteCustomer:async(req,res,next)=>{
     const { _id } = req.body;
     try {
       const data = await Customers.deleteOne({ _id: _id });

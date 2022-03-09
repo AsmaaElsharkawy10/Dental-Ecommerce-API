@@ -3,7 +3,6 @@ const Customers = require("../Models/customerSchema");
 
 module.exports.validatePostData = () => {
   return [
-    
     body("fullName")
       .isString()
       .withMessage("name is required and must be alpha"),
@@ -12,7 +11,7 @@ module.exports.validatePostData = () => {
       .isLength({ min: 8 })
       .withMessage("password min length: 8 "),
     body("confirmPassword")
-      .isInt()
+      .isAlphanumeric()
       .isLength({ min: 8 })
       .custom((value, { req }) => {
         if (value === req.body.customerPassword) return true;
@@ -49,8 +48,8 @@ module.exports.validatePutData = () => {
       .isEmail()
       .custom((value) => {
         return Customers.findOne({ customerEmail: value }).then((user) => {
-          if (user) {
-            return Promise.reject("E-mail not found");
+          if (!user) {
+            return Promise.reject("E-mail already in use");
           }
         });
       })
