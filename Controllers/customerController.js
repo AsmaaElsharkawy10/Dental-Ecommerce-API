@@ -88,4 +88,17 @@ module.exports = {
       })
       .catch((error) => next(error));
   },
+
+  
+  deleteCustomer:(req,res,next)=>{
+    const { _id } = req.body;
+    try {
+      const data = await Customers.deleteOne({ _id: _id });
+      res.send({ msg: "deleted", data });
+    } catch (err) {
+      next(err.message);
+    }  
+  }
+
+
 };
