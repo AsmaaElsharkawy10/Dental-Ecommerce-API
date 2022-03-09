@@ -1,8 +1,12 @@
-const ordersRouter =require("express").Router();
-const {getAllOrders} =require("../Controllers/ordersController")
-
+const ordersRouter = require('express').Router();
+const {
+  getAllOrders,
+  createOrders,
+} = require('../Controllers/ordersController');
+const { postOrders } = require('../Services/ordersService');
 ordersRouter
-.route("/orders/:id?")
-.get(getAllOrders)
+  .route('D/:id?')
+  .get(getAllOrders)
+  .post(postOrders(), createOrders);
 
 module.exports = ordersRouter;
