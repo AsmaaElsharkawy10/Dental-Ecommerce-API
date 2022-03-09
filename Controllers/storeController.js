@@ -1,4 +1,4 @@
-const Store = require("../Models/stores.model");
+const Store = require("../Models/storesSchema");
 const {validationResult} = require("express-validator")
 
     /*------------------------------- Get AllStores or One-------------------------------*/ 
@@ -6,11 +6,11 @@ const {validationResult} = require("express-validator")
     try {
         // check param id sent
         if (request.params.id) {
-        const store = await Store.findOne({ stores_id: request.params.id }).populate(["storeEmployees","storeCategories"]);
+        const store = await Store.findOne({ stores_id: request.params.id }); //.populate(["storeEmployeesId","storeCategoriesId"])
         response.json(store);
         } 
         else {
-        const stores = await Store.find().populate(["storeEmployees","storeCategories"]);
+        const stores = await Store.find({}); //.populate(["storeEmployeesId","storeCategoriesId"])
         response.json(stores);
         }
     } 
@@ -33,8 +33,8 @@ const {validationResult} = require("express-validator")
                         storePhone: request.body.storePhone,
                         storeAddress: request.body.storeAddress,
                         storeRent: request.body.storeRent,
-                        storeEmployees: request.body.storeEmployees,
-                        storeCategories: request.body.storeCategories
+                        storeEmployeesId: request.body.storeEmployeesId,
+                        storeCategoriesId: request.body.storeCategoriesId
                     });
                     newStore.save()
                         .then((data) => {
@@ -60,8 +60,8 @@ const {validationResult} = require("express-validator")
                     storePhone: request.body.storePhone,
                     storeAddress: request.body.storeAddress,
                     storeRent: request.body.storeRent,
-                    storeEmployees: request.body.storeEmployees,
-                    storeCategories: request.body.storeCategories
+                    storeEmployeesId: request.body.storeEmployeesId,
+                    storeCategoriesId: request.body.storeCategoriesId
                 }
             })
                     .then(data=>{

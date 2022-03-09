@@ -1,5 +1,5 @@
 const express = require("express");
-const { validatePostData } = require("../Services/store.service");
+const { validatePostData } = require("../Services/storeService");
 const router = express.Router();
 const controller = require("./../Controllers/storeController")
 

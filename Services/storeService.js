@@ -6,8 +6,8 @@ module.exports.validatePostData = () => {
     body("storePhone").isNumeric().withMessage("storePhone must be number "),
     body("storeAddress").isObject().withMessage("storeAddress must be an object"),
     body("storeRent").isNumeric().withMessage("storeRent must be number"),
-    body("storeEmployees").isArray().withMessage("please enter array of employess"),
-    body("storeCategories").isArray().withMessage("please enter array of categories"),
+    body("storeEmployeesId").isNumeric().withMessage("please enter id of category"),
+    body("storeCategoriesId").isNumeric().withMessage("please enter id of category"),
   ];
 };
 

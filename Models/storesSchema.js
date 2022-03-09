@@ -10,8 +10,8 @@ const schema = new mongoose.Schema({
     storeStreet: { type: String },
     },
     storeRent:String,
-    storeEmployees: [{ type: Number, ref: "employees" }],
-    storeCategories: [{ type: Number, ref: "categories" }]
+    storeEmployeesId: [{ type: Number, ref: "employees", required:true}],
+    storeCategoriesId: [{ type: Number, ref: "categories", required:true}]
 })
 
 schema.plugin(AutoIncrementId, { inc_field: "stores_id" });
