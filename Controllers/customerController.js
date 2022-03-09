@@ -30,8 +30,7 @@ module.exports = {
       let error = new Error();
       error.status = 422;
       throw error;
-    } else {
-      try {
+    } 
         let {
           customerPassword,
           customerPhone,
@@ -43,8 +42,7 @@ module.exports = {
           customerAddresses,
           role,
         } = req.body;
-        const emailExist = await Customers.findOne({ customerEmail });
-        if (!emailExist) {
+        
           const salt = bcrypt.genSaltSync(10);
           const hashedPassword = bcrypt.hashSync(customerPassword, salt);
           customerPassword = hashedPassword;
@@ -59,13 +57,9 @@ module.exports = {
             customerAddresses,
             role,
           });
-          await customer.save();
-          res.status(200).json(customer);
-        } else next("email is already existed");
-      } catch (error) {
-        next(`customer cannot be created :${error}`);
-      }
-    }
+          await customer.save()
+          .then(data=>res.status(200).json({message:"added",data}))
+          .catch(error=>next(error +"cannot add customer")); 
   }, //add customer
 
   updateCustomer: () => async (req, res, next) => {
@@ -74,63 +68,24 @@ module.exports = {
       let error = new Error();
       error.status = 422;
       throw error;
-    } else {
-      const {
-        _id,
-        customerPassword,
-        customerPhone,
-        fullName,
-        customerEmail,
-        customerImage,
-        customerTotalPurchase,
-        Orders,
-        customerAddresses,
-        role,
-      } = req.body;
-
-      try {
-        const customer = await Customers.findById(_id);
-        if (!customer) res.json({ msg: "no such customer" });
-
-        const salt = bcrypt.genSaltSync(10);
-        const hashedPassword = bcrypt.hashSync(customerPassword, salt);
-        customerPassword = hashedPassword;
-
-        customer.fullName = fullName || customer.fullName;
-        customer.customerPassword =
-          customerPassword || customer.customerPassword;
-        customer.customerEmail = customerEmail || customer.customerEmail;
-        customer.customerAddresses =
-          customerAddresses || customer.customerAddresses;
-        customer.role = role || customer.role;
-        customer.customerImage = customerImage || customer.customerImage;
-        customer.Orders = Orders || customer.Orders;
-        customer.customerTotalPurchase =
-          customerTotalPurchase || customer.customerTotalPurchase;
-        customer.customerPhone = customerPhone || customer.customerPhone;
-
-        const data = await customer.save();
-
-        res.json({ msg: "updated", data });
-      } catch (err) {
-        next(err.message);
-      }
     }
-  },
-
-  deleteCustomer: () => async (req, res, next) => {
-    let errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      let error = new Error();
-      error.status = 422;
-      throw error;
-    }
-    const { _id } = req.body;
-    try {
-      const data = await Customers.deleteOne({ _id: _id });
-      res.send({ msg: "deleted", data });
-    } catch (err) {
-      next(err.message);
-    }
+    Customers.findByIdAndUpdate(req.body._id, {
+      $set: {
+        customerPassword: req.body.customerPassword,
+        customerPhone: req.body.customerPhone,
+        fullName: req.body.fullName,
+        customerEmail: req.body.customerEmail,
+        customerImage: req.body.customerImage,
+        customerTotalPurchase: req.body.customerTotalPurchase,
+        Orders: req.body.Orders,
+        customerAddresses: req.body.customerAddresses,
+        role: req.body.role,
+      },
+    })
+      .then((data) => {
+        if (data == null) throw new Error("customer Is not Found!");
+        res.status(200).json({ message: "updated", data });
+      })
+      .catch((error) => next(error));
   },
 };

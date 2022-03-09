@@ -1,7 +1,9 @@
 const { body } = require("express-validator");
+const Customers = require("../Models/customerSchema");
 
 module.exports.validatePostData = () => {
   return [
+    
     body("fullName")
       .isString()
       .withMessage("name is required and must be alpha"),
@@ -9,7 +11,24 @@ module.exports.validatePostData = () => {
       .isAlphanumeric()
       .isLength({ min: 8 })
       .withMessage("password min length: 8 "),
-    body("customerEmail").isEmail().withMessage("please enter valid email"),
+    body("confirmPassword")
+      .isInt()
+      .isLength({ min: 8 })
+      .custom((value, { req }) => {
+        if (value === req.body.customerPassword) return true;
+        return false;
+      })
+      .withMessage("password min length: 8 "),
+      body("customerEmail")
+      .isEmail()
+      .custom((value) => {
+        return Customers.findOne({ customerEmail: value }).then((user) => {
+          if (user) {
+            return Promise.reject("E-mail already in use");
+          }
+        });
+      })
+      .withMessage("please enter valid email"),
     body("customerAddresses")
       .isArray()
       .isInt()
@@ -26,6 +45,16 @@ module.exports.validatePostData = () => {
 
 module.exports.validatePutData = () => {
   return [
+    body("customerEmail")
+      .isEmail()
+      .custom((value) => {
+        return Customers.findOne({ customerEmail: value }).then((user) => {
+          if (user) {
+            return Promise.reject("E-mail not found");
+          }
+        });
+      })
+      .withMessage("please enter valid email"),
     body("fullName")
       .isString()
       .withMessage("name is required and must be alpha"),
@@ -33,7 +62,6 @@ module.exports.validatePutData = () => {
       .isAlphanumeric()
       .isLength({ min: 8 })
       .withMessage("password min length: 8 "),
-    body("customerEmail").isEmail().withMessage("please enter valid email"),
     body("customerAddresses")
       .isArray()
       .isInt()
