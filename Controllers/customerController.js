@@ -22,7 +22,7 @@ module.exports = {
         next(error);
       }
     }
-  }, //get all or one speaker
+  }, //get all or one customer
 
   addCustomer: async (req, res, next) => {
     let errors = validationResult(req);
