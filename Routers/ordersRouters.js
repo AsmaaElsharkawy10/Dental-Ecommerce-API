@@ -1,12 +1,19 @@
-const ordersRouter = require('express').Router();
+const router = require('express').Router();
 const {
   getAllOrders,
   createOrders,
+  updateOrders,
+  removeOrders,
 } = require('../Controllers/ordersController');
-const { postOrders } = require('../Services/ordersService');
-ordersRouter
-  .route('D/:id?')
+const {
+  postOrders,
+  putOrders,
+  deleteOrder,
+} = require('../Services/ordersService');
+router
+  .route('/orders/:id?')
   .get(getAllOrders)
-  .post(postOrders(), createOrders);
-
-module.exports = ordersRouter;
+  .post(postOrders(), createOrders)
+  .put(putOrders(), updateOrders)
+  .delete(deleteOrder(), removeOrders);
+module.exports = router;

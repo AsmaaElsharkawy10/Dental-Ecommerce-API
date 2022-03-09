@@ -13,12 +13,12 @@ const ordersSchema = new mongoose.Schema({
   storesId: { type: Number, ref: 'Stores', required: true },
   flyboyId: { type: Number, ref: 'Flyboy', required: true },
   ordersDate: {
-    requestDate: { type: Date, required: true },
-    deliverDate: { type: Date, required: true },
+    requestDate: { type: Date },
+    deliverDate: { type: Date },
   },
 });
 
+ordersSchema.plugin(autoIncrement, { inc_field: '_id' });
 const Orders = mongoose.model('Orders', ordersSchema);
 
-ordersSchema.plugin(autoIncrement, { inc_field: '_id' });
 module.exports = Orders;
