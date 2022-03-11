@@ -1,5 +1,6 @@
 const mongoose =require("mongoose");
 const bcrypt = require('mongoose-bcrypt');
+const autoincremint = require('mongoose-sequence')(mongoose);
 // building schema 
 const EmployeeSchema= new mongoose.Schema({
 
@@ -15,16 +16,20 @@ const EmployeeSchema= new mongoose.Schema({
     gender:{type:String,enum: ['male','female'],required:true},
     militarystatus:{type:String,required:true},
     dateOfEmployment:{type:String,required:true},
-    // address: {
-    //     city: { type: String },
-    //     street: { type: String },
-    //     building: { type: Number },
+    address: {
+        city: { type: String },
+        street: { type: String },
+        building: { type: Number },
    
-    //   },
+      },
     position:{type:String}
 });
+
+EmployeeSchema.plugin(autoincremint,{
+    id:"employee count",
+    inc_field:"_id"
+})
 EmployeeSchema.plugin(bcrypt);
 // register schema for mongoo
-// module.exports=mongoose.model("employee",schema);
 const Employees=mongoose.model("Employees",EmployeeSchema);
 module.exports=Employees;

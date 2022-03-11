@@ -6,12 +6,12 @@ const {
   createEmployee,
   updateEmployee,
   deleteEmployee,
-} = require("../Controllers/controllerEmployee");
+} = require("../Controllers/employeeController");
 const {
   validatePostEmployee,
   validatePutEmployee,
   validateDeleteEmployee,
-} = require("../Services/servicesEmployee");
+} = require("../Services/employeeServices");
 const status = express.Router();
 status
   .route("/employee")

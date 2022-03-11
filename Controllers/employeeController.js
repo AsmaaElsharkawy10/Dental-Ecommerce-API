@@ -1,7 +1,7 @@
 const {validationResult}=require("express-validator");
 const {body,query,param}=require("express-validator");
 const bcrypt = require("bcrypt");
-const Employees = require("../Models/schemaEmployee");
+const Employees = require("../Models/employeeSchema");
 exports.getAllEmployees = (request,response,next) => {
   Employees.find({})
         .then((data)=>{
@@ -25,9 +25,9 @@ exports.createEmployee=(request,response,next)=>{
             error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
             throw error;
      }
-     let { _id,fullName, password, email, address, phone, image ,workHour,gender,militarystatus,dateOfEmployment,position} = request.body;
+     let { fullName, password, email, address, phone, image ,workHour,gender,militarystatus,dateOfEmployment,position} = request.body;
      let newEmployee = new Employees({
-       _id,
+       
         fullName,
         password,
         email,

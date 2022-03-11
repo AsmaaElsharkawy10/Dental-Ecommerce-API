@@ -1,9 +1,9 @@
 const { body } = require("express-validator");
-const Employees = require("../Models/schemaEmployee");
+const Employees = require("../Models/employeeSchema");
 
 module.exports.validatePostEmployee = () => {
   return [
-    body("_id").isInt().withMessage("id is required and must be number"),
+    // body("_id").isInt().withMessage("id is required and must be number"),
     body("fullName").isString().withMessage("name is required and must be alpha"),
     body("password").isInt().isLength({ min: 8 }).withMessage("password min length: 8 "),
     body("confirmPassword").isInt().isLength({ min: 8 })
@@ -19,7 +19,7 @@ module.exports.validatePostEmployee = () => {
           }
         });
       }).withMessage("please enter valid email"),
-    // body("address").isObject().optional().withMessage("send address as an object"),
+    body("address").isObject().optional().withMessage("send address as an object"),
     body("image").isString().withMessage("send your image"),
     body("phone").isInt().withMessage("send your phone"),
     body("workHour").isInt().withMessage("send your workHour"),
