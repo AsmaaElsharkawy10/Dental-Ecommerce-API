@@ -16,6 +16,6 @@ router
   .get(getAllOrOne)
   .post(validatePostData(), addCustomer)
   .put(validatePutData(), updateCustomer)
-  .delete(validateDeleteData(), deleteCustomer);
+  .delete( deleteCustomer);
 
 module.exports = router;

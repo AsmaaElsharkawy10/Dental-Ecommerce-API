@@ -1,4 +1,5 @@
 const Customers = require("../Models/customerSchema");
+const Addresses=require('../Models/addressSchema');
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 
@@ -14,7 +15,7 @@ module.exports = {
       }
     } else {
       try {
-        const customer = await Customers.findOne({ id });
+        const customer = await Customers.findOne({ _id:id });
         if (customer) {
           res.status(200).json(customer);
         } else res.status(400).json({ customer: "not Found" });
@@ -55,13 +56,26 @@ module.exports = {
             customerImage,
             customerTotalPurchase,
             Orders,
-            customerAddresses,
             role,
           });
           customer.save()
-          .then(data=>res.status(200).json({message:"added",data}))
           .catch(error=>next(error+"cannot add customer")); 
-      
+          
+          let address;
+           for (let i = 0; i < customerAddresses.length; i++) {
+           address=new Addresses({
+            country:customerAddresses[i].country,
+            city:customerAddresses[i].city,
+            streetName:customerAddresses[i].streetName,
+            buildingNumber:customerAddresses[i].buildingNumber,
+            floorNumber:customerAddresses[i].floorNumber,
+            ownerId:customer._id,
+          });
+          address.save()
+          .then(customer.customerAddresses.push(address._id)) 
+          .catch(error=>next(error+"cannot add this address"))
+        }
+           res.status(200).json({message:"adedd",customer});                       
 
   }, //add customer
 
@@ -73,7 +87,7 @@ module.exports = {
       error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
       throw error;
     }
-    Customers.updateOne({_id:req.body._id}, {
+    Customers.updateOne({_id:req.params.id}, {
       $set: {
         customerPassword: req.body.customerPassword,
         customerPhone: req.body.customerPhone,
@@ -95,13 +109,18 @@ module.exports = {
 
   
   deleteCustomer:async(req,res,next)=>{
-    const { _id } = req.body;
+    const {id } = req.params;
+    const customer =Customers.findOne({_id:id});
+    if(!customer){
+    next("cannot find this customer");
+    }else{
     try {
-      const data = await Customers.deleteOne({ _id: _id });
+      const data = await Customers.deleteOne({ _id: id });
       res.send({ msg: "deleted", data });
     } catch (err) {
       next(err.message);
-    }  
+    }
+  }  
   }
 
 

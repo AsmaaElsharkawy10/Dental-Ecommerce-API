@@ -17,7 +17,7 @@ module.exports.validatePostData = () => {
         if (value === req.body.customerPassword) return true;
         return false;
       })
-      .withMessage("password min length: 8 "),
+      .withMessage("confirmPassword min length: 8"),
       body("customerEmail")
       .isEmail()
       .custom((value) => {
@@ -27,13 +27,15 @@ module.exports.validatePostData = () => {
           }
         });
       })
-      .withMessage("please enter valid email"),
+      .withMessage("E-mail already in use"),
     body("customerAddresses")
       .isArray()
-      .isInt()
-      .withMessage("send address as an array"),
+      .withMessage("send address as object"),
+      
     body("role").isString().withMessage("select your role"),
-    body("Orders").isArray().isInt().withMessage("select your order"),
+    // body("Orders")
+    // .isArray()
+    // .isInt().withMessage("select your order"),
     body("customerTotalPurchase")
       .isInt()
       .withMessage("select your customerTotalPurchase"),
