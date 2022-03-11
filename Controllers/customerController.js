@@ -8,14 +8,14 @@ module.exports = {
     const { id } = req.params;
     if (!id) {
       try {
-        const allCustomer = await Customers.find();
+        const allCustomer = await Customers.find({}).populate({path:"customerAddresses"});
         res.status(200).json(allCustomer);
       } catch (error) {
         next(`cannot get all customers:${error}`);
       }
     } else {
       try {
-        const customer = await Customers.findOne({ _id:id });
+        const customer = await Customers.findOne({ _id:id }).populate({path:"customerAddresses"});
         if (customer) {
           res.status(200).json(customer);
         } else res.status(400).json({ customer: "not Found" });
@@ -69,17 +69,17 @@ module.exports = {
             streetName:customerAddresses[i].streetName,
             buildingNumber:customerAddresses[i].buildingNumber,
             floorNumber:customerAddresses[i].floorNumber,
-            ownerId:customer._id,
+            addressOwnerId:customer._id,
           });
           address.save()
           .then(customer.customerAddresses.push(address._id)) 
           .catch(error=>next(error+"cannot add this address"))
         }
-           res.status(200).json({message:"adedd",customer});                       
+           res.status(200).json({message:"adedd",customer});                         
 
   }, //add customer
 
-  updateCustomer:(req, res, next) => {
+  updateCustomer:async(req, res, next) => {    
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       let error=new Error();
@@ -92,7 +92,6 @@ module.exports = {
         customerPassword: req.body.customerPassword,
         customerPhone: req.body.customerPhone,
         fullName: req.body.fullName,
-        customerEmail: req.body.customerEmail,
         customerImage: req.body.customerImage,
         customerTotalPurchase: req.body.customerTotalPurchase,
         Orders: req.body.Orders,
@@ -103,19 +102,21 @@ module.exports = {
       .then((data) => {
         if (data == null) throw new Error("cannot update this customer");
         res.status(200).json({ message: "updated", data });
-      })
-      .catch((error) => next(error));
+      }).catch((error) => next(error));
+    
+    
   },
 
   
   deleteCustomer:async(req,res,next)=>{
-    const {id } = req.params;
+    const {id} = req.params;
     const customer =Customers.findOne({_id:id});
     if(!customer){
     next("cannot find this customer");
     }else{
     try {
       const data = await Customers.deleteOne({ _id: id });
+                   await Addresses.deleteOne({addressOwnerId:id});
       res.send({ msg: "deleted", data });
     } catch (err) {
       next(err.message);
