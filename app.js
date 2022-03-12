@@ -10,6 +10,7 @@ require('dotenv').config();
 
 /*------------------------------- Routers-------------------------------*/
 const ordersRouter = require("./Routers/ordersRouters");
+const notificationsRouter= require("./Routers/notificationsRouters")
 
 /*------------------------------- Images-------------------------------*/
 //image variable
@@ -79,12 +80,14 @@ app.use(body_parser.urlencoded({extended:false}));
 
 /*------------------------------- RoutersMiddleWares-------------------------------*/
 app.use(ordersRouter);
+app.use(notificationsRouter);
 
+/*------------------------------- NotFoundMiddleWares-------------------------------*/
 //Not found MW
 app.use((request, response) => {
   response.status(404).json({ data: 'Not Fond' });
 });
-
+/*------------------------------- ErrorMiddleWares-------------------------------*/
 //Error MW
 app.use((error, request, response, next) => {
   //JS  code function.length
