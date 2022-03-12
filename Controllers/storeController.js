@@ -6,11 +6,11 @@ const {validationResult} = require("express-validator")
     try {
         // check param id sent
         if (request.params.id) {
-        const store = await Store.findOne({ stores_id: request.params.id }); //.populate(["storeEmployeesId","storeCategoriesId"])
+        const store = await Store.findById( request.params.id ).populate({path:"returnsProudcts"}); 
         response.json(store);
         } 
         else {
-        const stores = await Store.find({}); //.populate(["storeEmployeesId","storeCategoriesId"])
+        const stores = await Store.find({}).populate({path:"returnedProductsId"})
         response.json(stores);
         }
     } 
@@ -27,24 +27,23 @@ const {validationResult} = require("express-validator")
             error.message = errors.array().reduce((current, object) => current + object.msg + " ", "");
             throw error;
         }
+        const {storeName, storePhone ,storeAddress,storeRent,storeEmployeesId,storeCategoriesId,returnedProductsId } = request.body;
+          const newStore = new Store({
+            storeName,
+            storePhone,
+            storeAddress,
+            storeRent,
+            storeEmployeesId,
+            storeCategoriesId,
+            returnedProductsId
+          });
 
-                    let newStore = new Store({
-                        storeName: request.body.storeName,
-                        storePhone: request.body.storePhone,
-                        storeAddress: request.body.storeAddress,
-                        storeRent: request.body.storeRent,
-                        storeEmployeesId: request.body.storeEmployeesId,
-                        storeCategoriesId: request.body.storeCategoriesId
-                    });
-                    newStore.save()
-                        .then((data) => {
-                            response.status(200).json({ message: "store added", data });
-                        })
-                        .catch((error) => next(error));
-                } 
+          const storeData = await newStore.save();
+          response.json({ msg: "store added", storeData });
+        }
 
         /*------------------------------- Update Store-------------------------------*/
-        exports.updateStore = (request,response,next)=> {
+        exports.updateStore = async(request,response,next)=> {
         let errors=validationResult(request);
         if(!errors.isEmpty())
         {
@@ -54,29 +53,46 @@ const {validationResult} = require("express-validator")
             throw error;
             
         }
-            Store.updateOne({ stores_id: request.params.id },{
-                $set:{
-                    storeName:request.body.storeName,
-                    storePhone: request.body.storePhone,
-                    storeAddress: request.body.storeAddress,
-                    storeRent: request.body.storeRent,
-                    storeEmployeesId: request.body.storeEmployeesId,
-                    storeCategoriesId: request.body.storeCategoriesId
-                }
-            })
-                    .then(data=>{
-                        if(data==null) throw new Error("Store not Found!")
-                        response.status(200).json({message:"store updated",data})
+            const {_id, storeName, storePhone, storeAddress,storeRent,storeEmployeesId,storeCategoriesId,returnedProductsId } = request.body;
+              try {
+                const store = await Store.findById(_id);
 
-                    })
-                    .catch(error=>next(error))
-    }
-    /*------------------------------- Delete Store-------------------------------*/ 
-    exports.deleteStore = (request, response, next) => {
-                Store.deleteOne({ stores_id: request.params.id })
-                .then((data) => {
-                    if (data == null) throw new Error("Store not Found!");
-                    response.status(200).json({ message: "store deleted", data });
-                })
-                .catch((error) => next(error))
+                if (!store) response.json({ msg: "store not found" });
+
+                store.storeName = storeName ;
+                store.storePhone = storePhone ;
+                store.storeAddress = storeAddress ;
+                store.storeRent = storeRent ;
+                store.storeEmployeesId = storeEmployeesId ;
+                 store.returnedProductsId = returnedProductsId ;
+
+                const updatedStore = await store.save();
+
+                response.json({ msg: "store updated", updatedStore });
+              } 
+              catch (error) {
+                next(error);
+              }
             }
+    /*------------------------------- Delete Store-------------------------------*/ 
+    exports.deleteStore = async(request, response, next) => {
+        let errors=validationResult(request);
+        if(!errors.isEmpty())
+        {
+            let error=new Error();
+            error.status=422; 
+            error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
+            throw error;
+            
+        }
+        const { _id } = request.body;
+            try {
+                const deletedStore = await Store.deleteOne({ _id: _id });
+                response.send({ msg: "store deleted", deletedStore });
+            } 
+            catch (error) {
+                next(error.message);
+            }
+            };
+
+

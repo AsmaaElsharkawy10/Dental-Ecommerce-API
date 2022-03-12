@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const AutoIncrementId = require("mongoose-sequence")(mongoose);
 
-const schema = new mongoose.Schema({
-    storeId: Number, 
+const storeSchema = new mongoose.Schema({
+    _id: { type: Number, alias: "storeId" }, 
     storeName: {type:String , required:true},
     storePhone: String,
     storeAddress: {
@@ -10,11 +10,11 @@ const schema = new mongoose.Schema({
     storeStreet: { type: String },
     },
     storeRent:String,
-    storeEmployeesId: [{ type: Number, ref: "employees", required:true}],
-    storeCategoriesId: [{ type: Number, ref: "categories", required:true}]
+    storeEmployeesId:[ { type: Number, ref: "employees", required:true}],
+    storeCategoriesId: [{ type: Number, ref: "categories", required:true}],
+    returnedProductsId:{type:Number, ref:"returnsProudcts" }
 })
 
-schema.plugin(AutoIncrementId, { inc_field: "stores_id" });
-const Store = mongoose.model("stores", schema);
-
+storeSchema.plugin(AutoIncrementId, { inc_field: "storeId" });
+const Store = mongoose.model("stores", storeSchema);
 module.exports = Store;
