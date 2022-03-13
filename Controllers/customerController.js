@@ -38,7 +38,6 @@ module.exports = {
           customerPhone,
           fullName,
           customerEmail,
-          customerImage,
           customerTotalPurchase,
           Orders,
           customerAddresses,
@@ -53,7 +52,7 @@ module.exports = {
             customerPhone,
             fullName,
             customerEmail,
-            customerImage,
+            image:"http://localhost:8080/images/"+req.file.filename,
             customerTotalPurchase,
             Orders,
             role,
@@ -92,7 +91,7 @@ module.exports = {
         customerPassword: req.body.customerPassword,
         customerPhone: req.body.customerPhone,
         fullName: req.body.fullName,
-        customerImage: req.body.customerImage,
+        image: "http://localhost:8080/images/"+req.file.filename,
         customerTotalPurchase: req.body.customerTotalPurchase,
         Orders: req.body.Orders,
         customerAddresses: req.body.customerAddresses,
@@ -103,7 +102,6 @@ module.exports = {
         if (data == null) throw new Error("cannot update this customer");
         res.status(200).json({ message: "updated", data });
       }).catch((error) => next(error));
-    
     
   },
 

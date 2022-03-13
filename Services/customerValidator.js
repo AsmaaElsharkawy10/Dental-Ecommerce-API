@@ -2,6 +2,9 @@ const { body, check,param } = require("express-validator");
 
 const Customers = require("../Models/customerSchema");
 
+/*------------------------------------- post --------------------------------------*/
+
+
 module.exports.validatePostData = () => {
   return [
     body("fullName")
@@ -73,7 +76,7 @@ module.exports.validatePostData = () => {
     .isIn(['Doctor', 'Merchant'])
     .withMessage("//select your role Merchant or Doctor"),
 
-    body("Orders").isArray().isInt().withMessage("select your order"),
+    // body("Orders").isArray().withMessage("select your order"),
     body("customerTotalPurchase")
       .isInt()
       .withMessage("//select your customerTotalPurchase"),
@@ -82,6 +85,8 @@ module.exports.validatePostData = () => {
   ];
 };
 
+
+/*------------------------------------- put --------------------------------------*/
 module.exports.validatePutData = () => {
   return [
     param("id")
@@ -155,10 +160,13 @@ module.exports.validatePutData = () => {
     body("customerTotalPurchase")
       .isInt()
       .withMessage("//select your customerTotalPurchase"),
-    body("customerImage").isString().withMessage("please enter valid image"),
+    body("image").isString().withMessage("please enter valid image"),
     body("customerPhone").isInt().withMessage("please enter valid phone"),
   ];
 };
+
+
+/*------------------------------------- delete --------------------------------------*/
 
 module.exports.validateDeleteData = () => {
   return body("_id").isInt().withMessage("id is only number");

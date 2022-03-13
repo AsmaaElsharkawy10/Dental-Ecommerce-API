@@ -7,7 +7,7 @@ streetName:{type:String,required:true},
 buildingNumber:{type:Number,required:true},
 floorNumber:{type:Number,required:true},
 addressOwnerId:{type:mongoose.Schema.Types.ObjectId ,required:true}  
-
+  
 });
 
 
