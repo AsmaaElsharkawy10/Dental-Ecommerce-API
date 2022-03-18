@@ -3,7 +3,7 @@ const {body,query,param}=require("express-validator");
 const bcrypt = require("bcrypt");
 const Flyboy = require("../Models/flyboySchema");
 exports.getAllFlyboy = (request,response,next) => {
-    Flyboy.find({}).populate({path:"employee"})
+    Flyboy.find({})
         .then((data)=>{
             response.status(200).json(data)
         }).catch(err=>{next(err+"cant show Flyboy")})    

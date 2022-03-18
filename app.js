@@ -11,6 +11,7 @@ require('dotenv').config();
 /*------------------------------- Routers-------------------------------*/
 const employeeRouter=require("./Routers/employeeRouter")
 const flyboyRouter=require("./Routers/flyboyRouters")
+const categoryRouter=require("./Routers/categoryRouter")
 /*------------------------------- Images-------------------------------*/
 //image variable
 const multer = require('multer');
@@ -79,7 +80,8 @@ app.use(body_parser.urlencoded({extended:false}));
 
 /*------------------------------- RoutersMiddleWares-------------------------------*/
 app.use(employeeRouter);
-app.use(flyboyRouter)
+app.use(flyboyRouter);
+app.use(categoryRouter);
 
 //Not found MW
 app.use((request, response) => {
