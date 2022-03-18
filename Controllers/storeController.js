@@ -43,7 +43,7 @@ const {validationResult} = require("express-validator")
         }
 
         /*------------------------------- Update Store-------------------------------*/
-        exports.updateStore = async(request,response,next)=> {
+        module.exports.updateStore = async(request,response,next)=> {
         let errors=validationResult(request);
         if(!errors.isEmpty())
         {
@@ -53,7 +53,16 @@ const {validationResult} = require("express-validator")
             throw error;
             
         }
-            const {_id, storeName, storePhone, storeAddress,storeRent,storeEmployeesId,storeCategoriesId,returnedProductsId } = request.body;
+            const { _id,
+                    storeName, 
+                    storePhone, 
+                    storeAddress,
+                    storeRent,
+                    storeEmployeesId,
+                    storeCategoriesId,
+                    returnedProductsId 
+                  } = request.body;
+
               try {
                 const store = await Store.findById(_id);
 
@@ -64,7 +73,8 @@ const {validationResult} = require("express-validator")
                 store.storeAddress = storeAddress ;
                 store.storeRent = storeRent ;
                 store.storeEmployeesId = storeEmployeesId ;
-                 store.returnedProductsId = returnedProductsId ;
+                store.atoreCategoriesId = storeCategoriesId;
+                store.returnedProductsId = returnedProductsId ;
 
                 const updatedStore = await store.save();
 
@@ -75,7 +85,7 @@ const {validationResult} = require("express-validator")
               }
             }
     /*------------------------------- Delete Store-------------------------------*/ 
-    exports.deleteStore = async(request, response, next) => {
+        module.exports.deleteStore = async(request, response, next) => {
         let errors=validationResult(request);
         if(!errors.isEmpty())
         {

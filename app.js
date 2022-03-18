@@ -11,6 +11,8 @@ require('dotenv').config();
 /*------------------------------- Routers-------------------------------*/
 const storeRouter = require("./Routers/storeRouter")
 const returnsRouter = require("./Routers/returnsRouter")
+const spoiledRouter = require("./Routers/spoiledRouter")
+
 
 /*------------------------------- Images-------------------------------*/
 //image variable
@@ -81,6 +83,9 @@ app.use(body_parser.urlencoded({extended:false}));
 /*------------------------------- RoutersMiddleWares-------------------------------*/
 app.use(storeRouter)
 app.use(returnsRouter)
+app.use(spoiledRouter)
+
+
 //Not found MW
 app.use((request, response) => {
   response.status(404).json({ data: 'Not Fond' });

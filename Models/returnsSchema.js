@@ -5,7 +5,7 @@ const returnsSchema = new mongoose.Schema({
     _id: { type: Number, alias: "returnsId" }, 
     storeId:{ type:Number,required:true },
     receiptId: { type: Number, ref:"receipts", required:true},
-    returnedProucts: [{ type: String, required:true}]
+    returnedProducts: [{ type: String, required:true}]
     
 })
 

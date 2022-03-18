@@ -14,7 +14,7 @@
         response.json(returnProucts)
         }
     } catch {
-        ;(error) => next(error)
+        (error) => next(error)
     }
     }
 
@@ -34,12 +34,12 @@
     const {
         storeId,
         receiptId,
-        returnedProucts,
+        returnedProducts,
     } = request.body
     const newReturnedProduct = new Returns({
         storeId,
         receiptId,
-        returnedProucts,
+        returnedProducts,
     })
 
     const returnedProductData = await newReturnedProduct.save()
@@ -47,7 +47,7 @@
     }
 
     /*------------------------------- Update returnedProduct-------------------------------*/
-    exports.updateReturnedProduct = async (request, response, next) => {
+    module.exports.updateReturnedProduct = async (request, response, next) => {
     let errors = validationResult(request)
     if (!errors.isEmpty()) {
         let error = new Error()
@@ -59,24 +59,20 @@
     }
     const {
         _id,
-        storeName,
-        storePhone,
-        storeAddress,
-        storeRent,
-        storeEmployeesId,
-        storeCategoriesId,
+        storeId,
+        receiptId,
+        returnedProducts,
+
     } = request.body
     try {
         const returnedProduct = await Returns.findById(_id)
 
         if (!returnedProduct) response.json({ msg: 'returnedProduct not found' })
 
-        // store.storeName = storeName ;
-        // store.storePhone = storePhone ;
-        // store.storeAddress = storeAddress ;
-        // store.storeRent = storeRent ;
-        // store.storeEmployeesId = storeEmployeesId ;
-        // store.storeCategoriesId = storeCategoriesId ;
+        returnedProduct.storeId = storeId ;
+        returnedProduct.receiptId = receiptId ;
+        returnedProduct.returnedProucts = returnedProducts ;
+
 
         const updatedreturnedProduct = await returnedProduct.save()
 
@@ -88,7 +84,7 @@
 
     /*------------------------------- Delete returnProduct-------------------------------*/
 
-        exports.deleteReturnedProduct = async(request, response, next) => {
+    module.exports.deleteReturnedProduct = async(request, response, next) => {
     let errors = validationResult(request)
     if (!errors.isEmpty()) {
         let error = new Error()
@@ -101,7 +97,7 @@
     const { _id } = request.body
     try {
         const deletedReturnedProduct = await Returns.deleteOne({ _id: _id })
-        response.send({ msg: 'store deleted', deletedReturnedProduct })
+        response.send({ msg: 'returnedProduct deleted', deletedReturnedProduct })
     } catch (error) {
         next(error.message)
     }
