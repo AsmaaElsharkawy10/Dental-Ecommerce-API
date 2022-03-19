@@ -19,6 +19,7 @@ module.exports.postVendor = () => {
 
   module.exports.putVendor = () => {
     return [
+      body("_id").isNumeric().withMessage("id is not a number"),
       body("vendorName").isString().withMessage("vendorName is required and must be A string"),
       body("phoneNumber").custom((value) => {
         return Vendor.findOne({ phoneNumber: value }).then((vendor) => {
@@ -34,5 +35,5 @@ module.exports.postVendor = () => {
   };
 
   module.exports.deleteVendor= () => {
-    return body("_id").isAlphanumeric().withMessage("id is not a number");
+    return body("_id").isNumeric().withMessage("id is not a number");
   };

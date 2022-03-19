@@ -11,6 +11,7 @@ require('dotenv').config();
 /*------------------------------- Routers-------------------------------*/
 const receiptRouter = require("./Routers/receiptRouter");
 const vendorRouter = require("./Routers/vendorRouter");
+const discountRouter = require("./Routers/discountRouter");
 
 /*------------------------------- Images-------------------------------*/
 //image variable
@@ -72,7 +73,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/Images",express.static(path.join(__dirname,"Images")))
+app.use("/images",express.static(path.join(__dirname,"images")))
 app.use(multer({storage,fileFilter}).single("image"));
 app.use(cors());
 app.use(body_parser.json());
@@ -81,6 +82,7 @@ app.use(body_parser.urlencoded({extended:false}));
 /*------------------------------- RoutersMiddleWares-------------------------------*/
 app.use(receiptRouter);
 app.use(vendorRouter);
+app.use(discountRouter )
 
 
 //Not found MW

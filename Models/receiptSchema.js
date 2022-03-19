@@ -3,11 +3,11 @@ const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const receiptSchema = new mongoose.Schema({
   _id: { type: Number },
-  purchaserName: String,
+  purchaserName: {type:String , required:true},
   // orderId: {type:Number,ref:"orders"},
-  date: Date,
+  date: {type:Date,required:true},
   status: {type:String,enum:["paid","owed"]},
-  totalPrice: Number,
+  totalPrice: {type:Number , required:true},
   type: {type:String, enum: ["selling", "buying"]},
   // products:[{type:Number,ref:"products"}]
 });

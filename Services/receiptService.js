@@ -47,5 +47,5 @@ module.exports.putReceipt = () => {
 };
 
 module.exports.deleteReceipt = () => {
-  return body("_id").isAlphanumeric().withMessage("id is not a number");
+  return body("_id").isNumeric().withMessage("id is not a number");
 };
