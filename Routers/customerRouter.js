@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const isAuth = require('../Middlewares/AuthMW')
 const {
   getAllOrOne,
   addCustomer,
@@ -13,7 +14,7 @@ const {
 
 router
   .route("/customer/:id?")
-  .get(getAllOrOne)
+  .get(/*isAuth,*/getAllOrOne)
   .post(validatePostData(), addCustomer)
   .put(validatePutData(), updateCustomer)
   .delete( deleteCustomer);

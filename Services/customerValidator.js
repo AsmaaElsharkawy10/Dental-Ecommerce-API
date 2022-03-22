@@ -37,7 +37,6 @@ module.exports.validatePostData = () => {
       }).withMessage("//E-mail already in use"),
 
     body("customerAddresses")
-    .isArray()
     .not()
     .isEmpty()
     .withMessage("//enter customerAddresses as Array not empty"),
@@ -76,7 +75,7 @@ module.exports.validatePostData = () => {
     .isIn(['Doctor', 'Merchant'])
     .withMessage("//select your role Merchant or Doctor"),
 
-    // body("Orders").isArray().withMessage("select your order"),
+    body("Orders").isArray().withMessage("select your order"),
     body("customerTotalPurchase")
       .isInt()
       .withMessage("//select your customerTotalPurchase"),
@@ -169,5 +168,5 @@ module.exports.validatePutData = () => {
 /*------------------------------------- delete --------------------------------------*/
 
 module.exports.validateDeleteData = () => {
-  return body("_id").isInt().withMessage("id is only number");
+  return body("_id").isObject().withMessage("id is only number");
 };

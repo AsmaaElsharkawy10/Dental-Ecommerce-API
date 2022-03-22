@@ -44,6 +44,7 @@ module.exports = {
           role,
         } = req.body;
         
+
           const salt = bcrypt.genSaltSync(10);
           const hashedPassword = bcrypt.hashSync(customerPassword, salt);
           customerPassword = hashedPassword;
@@ -61,7 +62,8 @@ module.exports = {
           .catch(error=>next(error+"cannot add customer")); 
           
           let address;
-           for (let i = 0; i < customerAddresses.length; i++) {
+          
+          for (let i = 0; i < customerAddresses.length; i++) {
            address=new Addresses({
             country:customerAddresses[i].country,
             city:customerAddresses[i].city,
@@ -74,6 +76,7 @@ module.exports = {
           .then(customer.customerAddresses.push(address._id)) 
           .catch(error=>next(error+"cannot add this address"))
         }
+           
            res.status(200).json({message:"adedd",customer});                         
 
   }, //add customer
