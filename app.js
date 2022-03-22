@@ -54,7 +54,7 @@ app.use((request, response, next) => {
 mongoose
   .connect(process.env.DB_URI)
   .then(() => {
-    console.log('connected to clinicSystemDB');
+    console.log('connected to lifeSystemDB');
     //listening on port
     const port = process.env.PORT || 8080;
     app.listen(port, () => {
