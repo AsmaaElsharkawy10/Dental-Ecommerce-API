@@ -1,1 +1,1 @@
-# life-project
+# clinic-project
