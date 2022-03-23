@@ -4,11 +4,14 @@ const express = require('express');
 const body_parser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
 const path = require('path');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 /*------------------------------- Routers-------------------------------*/
+const receiptRouter = require("./Routers/receiptRouter");
+const vendorRouter = require("./Routers/vendorRouter");
+const discountRouter = require("./Routers/discountRouter");
 
 /*------------------------------- Images-------------------------------*/
 //image variable
@@ -70,13 +73,16 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/Images",express.static(path.join(__dirname,"Images")))
+app.use("/images",express.static(path.join(__dirname,"images")))
 app.use(multer({storage,fileFilter}).single("image"));
 app.use(cors());
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({extended:false})); 
 
 /*------------------------------- RoutersMiddleWares-------------------------------*/
+app.use(receiptRouter);
+app.use(vendorRouter);
+app.use(discountRouter )
 
 
 //Not found MW
@@ -90,3 +96,4 @@ app.use((error, request, response, next) => {
   let status = error.status || 500;
   response.status(status).json({ Error: error + '' });
 });
+
