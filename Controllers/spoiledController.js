@@ -3,7 +3,7 @@
 
     module.exports.getAllSpoiledProductsOrOne = async (request, response, next) => {
     try {
-        // check param id sent
+        
         if (request.params.id) {
         const spoliedProduct = await SpoiledProducts.findById(request.params.id)
         response.json(spoliedProduct)

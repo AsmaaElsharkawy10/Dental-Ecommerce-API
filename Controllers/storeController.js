@@ -4,13 +4,13 @@ const {validationResult} = require("express-validator")
     /*------------------------------- Get AllStores or One-------------------------------*/ 
     module.exports.getAllStoresOrOne = async (request, response, next) => {
     try {
-        // check param id sent
+        
         if (request.params.id) {
-        const store = await Store.findById( request.params.id ).populate({path:"returnsProudcts"}); 
+        const store = await Store.findById( request.params.id ) 
         response.json(store);
         } 
         else {
-        const stores = await Store.find({}).populate({path:"returnedProductsId"})
+        const stores = await Store.find({}) 
         response.json(stores);
         }
     } 
@@ -27,7 +27,7 @@ const {validationResult} = require("express-validator")
             error.message = errors.array().reduce((current, object) => current + object.msg + " ", "");
             throw error;
         }
-        const {storeName, storePhone ,storeAddress,storeRent,storeEmployeesId,storeCategoriesId,returnedProductsId } = request.body;
+        const {storeName, storePhone ,storeAddress,storeRent,storeEmployeesId,storeCategoriesId } = request.body;
           const newStore = new Store({
             storeName,
             storePhone,
@@ -35,7 +35,7 @@ const {validationResult} = require("express-validator")
             storeRent,
             storeEmployeesId,
             storeCategoriesId,
-            returnedProductsId
+            
           });
 
           const storeData = await newStore.save();
@@ -60,7 +60,7 @@ const {validationResult} = require("express-validator")
                     storeRent,
                     storeEmployeesId,
                     storeCategoriesId,
-                    returnedProductsId 
+                     
                   } = request.body;
 
               try {
@@ -73,8 +73,8 @@ const {validationResult} = require("express-validator")
                 store.storeAddress = storeAddress ;
                 store.storeRent = storeRent ;
                 store.storeEmployeesId = storeEmployeesId ;
-                store.atoreCategoriesId = storeCategoriesId;
-                store.returnedProductsId = returnedProductsId ;
+                store.storeCategoriesId = storeCategoriesId;
+                
 
                 const updatedStore = await store.save();
 

@@ -12,7 +12,7 @@ const storeSchema = new mongoose.Schema({
     storeRent:String,
     storeEmployeesId:[ { type: Number, ref: "employees", required:true}],
     storeCategoriesId: [{ type: Number, ref: "categories", required:true}],
-    returnedProductsId:{type:Number, ref:"returnsProudcts" }
+    returnedProductsId:[{type:Number, ref:"returnsProudcts" }]
 })
 
 storeSchema.plugin(AutoIncrementId, { inc_field: "storeId" });

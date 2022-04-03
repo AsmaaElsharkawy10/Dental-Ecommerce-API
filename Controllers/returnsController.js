@@ -5,7 +5,7 @@
 
     module.exports.getAllReturnsOrOne = async (request, response, next) => {
     try {
-        // check param id sent
+        
         if (request.params.id) {
         const returnedProuct = await Returns.findById(request.params.id)
         response.json(returnedProuct)
