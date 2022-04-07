@@ -23,6 +23,7 @@ const spoiledRouter=require('./Routers/spoiledRouter')
 const storeRouter=require('./Routers/storeRouter')
 const ordersRouter = require("./Routers/ordersRouters");
 const notificationsRouter= require("./Routers/notificationsRouters")
+const productRouter= require("./Routers/productRouter")
 
 
 /*------------------------------- Images-------------------------------*/
@@ -107,6 +108,7 @@ app.use(spoiledRouter);
 app.use(storeRouter);
 app.use(ordersRouter);
 app.use(notificationsRouter);
+app.use(productRouter)
 
 
 
