@@ -45,14 +45,6 @@ module.exports.createReceipt = async (req, res, next) => {
 
 // update receipt
 module.exports.updateReceipt= async (req, res, next) => {
-  const errors = validationResult(req);
-  if(!errors.isEmpty())
-  {
-         let error=new Error();
-         error.status=422;
-         error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
-         throw error;
-  }
 
   const {_id,  purchaserName, date, status, totalPrice, type } = req.body;
 
@@ -78,14 +70,7 @@ module.exports.updateReceipt= async (req, res, next) => {
 
 // Delete receipt
 module.exports.removeReceipt= async (req, res, next) => {
-  const errors = validationResult(req);
-  if(!errors.isEmpty())
-  {
-         let error=new Error();
-         error.status=422;
-         error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
-         throw error;
-  }
+ 
   const { _id } = req.body;
   try {
     const deletedReceipt = await Receipt.deleteOne({ _id: _id });
