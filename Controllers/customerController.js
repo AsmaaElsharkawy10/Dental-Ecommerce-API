@@ -19,7 +19,11 @@ module.exports = {
       }
     } else {
       try {
-        const customer = await Customers.findOne({ _id:id }).populate({path:"customerAddresses"});
+        const customer = await Customers.findOne({ _id:id })
+        .populate({path:"customerAddresses"})
+        .populate({path:"cart"})
+        .populate({path:"myFavorite"});
+
         if (customer) {
           res.status(200).json(customer);
         } else res.status(400).json({ customer: "not Found" });
@@ -44,16 +48,16 @@ module.exports = {
           customerEmail,
           customerTotalPurchase,
           role,
-          Orders,
-          cart,
-          myFavorite,
-          customerAddresses
+          // Orders,
+          // cart,
+          // myFavorite,
+          // customerAddresses
         } = req.body;
         
-        // let customerAddresses=JSON.parse(req.body.customerAddresses);
-        // let Orders=JSON.parse(req.body.Orders);
-        // let cart=JSON.parse(req.body.cart);
-        // let myFavorite=JSON.parse(req.body.myFavorite);
+        let customerAddresses=JSON.parse(req.body.customerAddresses);
+        let Orders=JSON.parse(req.body.Orders);
+        let cart=JSON.parse(req.body.cart);
+        let myFavorite=JSON.parse(req.body.myFavorite);
 
         console.log(customerAddresses);
           const salt = bcrypt.genSaltSync(10);
@@ -76,7 +80,6 @@ module.exports = {
           .catch(error=>next(error+"cannot add customer")); 
           
           let address;
-          
           for (let i = 0; i < customerAddresses.length; i++) {
            address=new Addresses({
             country:customerAddresses[i].country,

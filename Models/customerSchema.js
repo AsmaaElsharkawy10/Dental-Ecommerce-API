@@ -13,7 +13,7 @@ const customerSchema = new mongoose.Schema({
     ],
   },
   
-  image:String,
+  // image:String,
   customerPassword: { type: String, required: true },
   confirmPassword:{ type: String, required: false },
   customerTotalPurchase: { type: Number, required: true },

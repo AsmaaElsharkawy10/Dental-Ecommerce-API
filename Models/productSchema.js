@@ -12,7 +12,8 @@ const productSchema = new mongoose.Schema({
   countryOfManufacture:{type:String,required:true},
   description: {type:String , required:true},
   category:{type:Number,ref:"Category"},
-  discount:{type:Number,ref:"discounts"}
+  discount:{type:Number,ref:"discounts"},
+  rating:{type:Number}
 });
 
 productSchema.plugin(AutoIncrement, {inc_field: "productId" });
