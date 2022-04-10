@@ -8,7 +8,11 @@ module.exports = {
     const { id } = req.params;
     if (!id) {
       try {
-        const allCustomer = await Customers.find({}).populate({path:"customerAddresses"});
+        const allCustomer = await Customers.find({})
+        .populate({path:"customerAddresses"})
+        .populate({path:"cart"})
+        .populate({path:"myFavorite"})
+
         res.status(200).json(allCustomer);
       } catch (error) {
         next(`cannot get all customers:${error}`);
@@ -40,10 +44,16 @@ module.exports = {
           customerEmail,
           customerTotalPurchase,
           role,
+          Orders,
+          cart,
+          myFavorite,
+          customerAddresses
         } = req.body;
         
-        let customerAddresses=JSON.parse(req.body.customerAddresses);
-        let Orders=JSON.parse(req.body.Orders);
+        // let customerAddresses=JSON.parse(req.body.customerAddresses);
+        // let Orders=JSON.parse(req.body.Orders);
+        // let cart=JSON.parse(req.body.cart);
+        // let myFavorite=JSON.parse(req.body.myFavorite);
 
         console.log(customerAddresses);
           const salt = bcrypt.genSaltSync(10);
@@ -55,9 +65,11 @@ module.exports = {
             customerPhone,
             fullName,
             customerEmail,
-            image:"http://localhost:8080/images/"+req.file.filename,
+            // image:"http://localhost:8080/images/"+req.file.filename,
             customerTotalPurchase,
             Orders,
+            cart,
+            myFavorite,
             role,
           });
           customer.save()

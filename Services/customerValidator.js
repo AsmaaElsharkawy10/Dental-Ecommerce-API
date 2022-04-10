@@ -37,7 +37,7 @@ module.exports.validatePostData = () => {
       }).withMessage("//E-mail already in use"),
       
     body("customerAddresses") 
-    .isString()
+    .isArray()
     .not()
     .isEmpty()
     .withMessage("//enter customerAddresses as Array not empty"),
@@ -78,7 +78,11 @@ module.exports.validatePostData = () => {
     .withMessage("//select your role Merchant or Doctor"),
 
     body("Orders")
-    .isString().withMessage("select your order"),
+    .isArray().withMessage("select your order"),
+
+    body("myFavorite")
+    .isArray().withMessage("select your order"),
+    
 
     body("customerTotalPurchase")
       .isInt()

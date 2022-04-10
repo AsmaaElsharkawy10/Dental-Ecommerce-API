@@ -20,7 +20,7 @@ module.exports.validatePostEmployee = () => {
         });
       }).withMessage("please enter valid email"),
     body("address").isObject().optional().withMessage("send address as an object"),
-    body("image").isString().withMessage("send your image"),
+    body("image").optional().isString().withMessage("send your image"),
     body("phone").isInt().withMessage("send your phone"),
     body("workHour").isInt().withMessage("send your workHour"),
     body("gender").isString().withMessage("send your gender male or female"),
@@ -36,6 +36,7 @@ module.exports.validatePutEmployee = () => {
         body("_id").isInt().withMessage("id is required and must be number"),
         body("newEmployee.fullName").isString().withMessage("name is required and must be alpha"),
         body("newEmployee.password").isInt().isLength({ min: 8 }).withMessage("password min length: 8 "),
+        body("newEmployeeImage").optional().isString().withMessage("send your image"),
         body("newEmployee.email").isEmail()
         .custom((value) => {
             return Employees.findOne({ email: value }).then((user) => {
