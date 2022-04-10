@@ -11,8 +11,8 @@ module.exports.postProduct = () => {
     body("countryOfManufacture").isString().withMessage("countryOfManufacture must be String"),
     body("expirationDate").isDate().withMessage("expirationDate date must be date formate"),
     body("company").isString().withMessage("company name date must be string"),
-    body("discountId").isNumeric().withMessage("Discount ID must be  number"),
-    body("categoryId").isNumeric().withMessage("category ID must be  number")
+    body("discount").isNumeric().withMessage("Discount ID must be  number"),
+    body("category").isNumeric().withMessage("category ID must be  number")
 
 
   ]
@@ -29,8 +29,8 @@ module.exports.putProduct = () => {
     body("countryOfManufacture").isString().withMessage("countryOfManufacture must be String"),
     body("expirationDate").isDate().withMessage("expirationDate date must be date formate"),
     body("company").isString().withMessage("company name  must be string"),
-    body("discountId").isNumeric().withMessage("Discount ID must be  number"),
-    body("categoryId").isNumeric().withMessage("category ID must be  number")
+    body("discount").isNumeric().withMessage("Discount ID must be  number"),
+    body("category").isNumeric().withMessage("category ID must be  number")
   ]
 };
 

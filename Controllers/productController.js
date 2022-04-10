@@ -6,10 +6,10 @@ module.exports.getAllProductsOrOne = async (req, res, next) => {
   try {
     // check param id sent
     if (req.params.id) {
-      const product = await Product.findById(req.params.id);
+      const product = await Product.findById(req.params.id).populate([{path:'discount'},{path:'category'}]);
       res.json(product);
     } else {
-      const products = await Product.find();
+      const products = await Product.find().populate([{path:'discount'},{path:'category'}]);
       res.json(products);
     }
   } catch (err) {
@@ -27,14 +27,14 @@ module.exports.createProduct = async (req, res, next) => {
           error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
           throw error;
    }
-  const {productName , expirationDate ,company,price,quantity,countryOfManufacture,description,category,discount } = req.body;
+  const {productName , expirationDate ,company,price,quantity,countryOfManufacture,description,category,discount,image } = req.body;
   const newProduct = new Product({
     productName,
     expirationDate,
     company,
     price,
     quantity,
-    image:req.file.filename,
+    image,
     countryOfManufacture,
     description,
     category,
@@ -45,6 +45,16 @@ module.exports.createProduct = async (req, res, next) => {
   const productData = await newProduct.save();
   res.json({ msg: "Product added", productData });
 }
+
+// const Comment = require("/path/to/commentSchema");
+
+// let newComment = new Comment({
+//    user: userId,
+//    blog: blogId,
+//    body: "this is a new comment"
+// });
+
+
 
 // update product
 module.exports.updateProduct= async (req, res, next) => {

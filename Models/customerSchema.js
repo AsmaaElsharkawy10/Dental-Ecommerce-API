@@ -17,9 +17,9 @@ const customerSchema = new mongoose.Schema({
   customerPassword: { type: String, required: true },
   confirmPassword:{ type: String, required: false },
   customerTotalPurchase: { type: Number, required: true },
-  
+  cart:[{type:Number, ref:"products"}],
+  myFavorite:[{type:Number, ref:"products"}],
   Orders: [{ type: Number, ref: "Orders" }],
-  
   customerAddresses: [{type:mongoose.Schema.Types.ObjectId ,ref: "Addresses"}],
 
   role: {type:String, enum: ["Doctor", "Merchant"], required: true },

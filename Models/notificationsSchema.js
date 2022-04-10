@@ -5,12 +5,12 @@ const notificationsSchema = new mongoose.Schema({
   _id: {type:Number , alias:"notificationId"},
   name: String,
   customerId: { type: Number, ref: 'customers', required: true },
- productId: { type: Number, ref: 'product', required: true },
-  status: {
-    type: String,
-    enum: ['inProgress', 'completed', 'underRevison'],
-    required: true,
-  },
+   productId: { type: Number, ref: 'product', required: true },
+   status: {
+      type: String,
+      enum: ['inProgress', 'completed', 'underRevison'],
+      required: true,
+    },
   totalPrice: Number,
   type: {type:String, enum: ["selling", "purchase"]},
 });

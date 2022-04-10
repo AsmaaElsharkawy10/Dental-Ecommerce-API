@@ -13,7 +13,7 @@ const EmployeeSchema= new mongoose.Schema({
     },
     fullName:{type:String,required:true},
     password:{type:String,bcrypt:true,required:true},
-    image:{type:String,required:true},
+    image:{type:String},
     phone:{type:Number,required:true},
     workHour:{type:Number,required:true},
     gender:{type:String,enum: ['male','female'],required:true},

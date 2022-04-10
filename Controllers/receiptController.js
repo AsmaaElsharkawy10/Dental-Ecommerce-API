@@ -6,10 +6,10 @@ module.exports.getAllReceiptsOrOne = async (req, res, next) => {
   try {
     // check param id sent
     if (req.params.id) {
-      const receipt = await Receipt.findById(req.params.id);
+      const receipt = await Receipt.findById(req.params.id).populate({path:"products"});
       res.json(receipt);
     } else {
-      const receipts = await Receipt.find();
+      const receipts = await Receipt.find().populate({path:"products"});
       res.json(receipts);
     }
   } catch (err) {
@@ -28,15 +28,15 @@ module.exports.createReceipt = async (req, res, next) => {
           error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
           throw error;
    }
-  const {purchaserName, date, status,totalPrice,type } = req.body;
+  const {purchaserName, date, status,totalPrice,type,orderId,products } = req.body;
   const newReceipt = new Receipt({
     purchaserName,
     date,
- // orderId,
+    orderId,
     status,
     totalPrice,
     type,
-  // products
+    products
   });
 
   const receiptData = await newReceipt.save();
@@ -46,7 +46,7 @@ module.exports.createReceipt = async (req, res, next) => {
 // update receipt
 module.exports.updateReceipt= async (req, res, next) => {
 
-  const {_id,  purchaserName, date, status, totalPrice, type } = req.body;
+  const {_id,  purchaserName, date, status, totalPrice, type ,products,orderId} = req.body;
 
   try {
     const receipt = await Receipt.findById(_id);
@@ -58,6 +58,8 @@ module.exports.updateReceipt= async (req, res, next) => {
     receipt.status = status ;
     receipt.totalPrice = totalPrice;
     receipt.type = type;
+    receipt.orderId = orderId;
+    receipt.products = products;
    
 
     const updatedReceipt = await receipt.save();
