@@ -12,12 +12,9 @@ const {
   putProduct,
   deleteProduct,
 } = require("../Services/productService");
-
-productRouter
-  .route("/products/:id?")
-  .get(getAllProductsOrOne)
-  .post(postProduct(), createProduct)
-  .put(putProduct(), updateProduct)
-  .delete(deleteProduct(), removeProduct);
-
+productRouter.route("/products/:key?")
+             .get(getAllProductsOrOne)
+             .post(postProduct(), createProduct)
+             .put(putProduct(), updateProduct)
+             .delete(deleteProduct(), removeProduct);
 module.exports = productRouter;

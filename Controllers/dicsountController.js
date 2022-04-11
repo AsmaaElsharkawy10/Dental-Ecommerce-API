@@ -64,8 +64,8 @@ module.exports.updateDiscount= async (req, res, next) => {
 // Delete receipt
 module.exports.removeDiscount= async (req, res, next) => {
  
-  const { _id } = req.body;
-  try {
+  const {id} = req.params;
+    try {
     const deletedDiscount = await Discount.deleteOne({ _id: _id });
     res.send({ msg: "Discount deleted", deletedDiscount });
   } catch (err) {

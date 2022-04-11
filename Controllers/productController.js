@@ -3,15 +3,35 @@ const Product = require("../Models/productSchema");
 
 //Get all products
 module.exports.getAllProductsOrOne = async (req, res, next) => {
+
   try {
     // check param id sent
-    if (req.params.id) {
-      const product = await Product.findById(req.params.id).populate([
-        { path: "discount" },
-        { path: "category" },
-      ]);
-      res.json(product);
-    } else {
+    if (req.params.key) {
+
+      // let param = [
+      //   {
+      //     $lookup:{
+      //       from:"Category",
+      //       localField:"category",
+      //       foreignField:"_id",
+      //       as:"categoryName"
+      //   }
+      // }
+      // ]
+
+      // let products = await Product.aggregate(param)
+      // res.json(products)
+      const products = await Product.find(
+        {
+        "$or":[
+          {"productName":{$regex:req.params.key}},
+          {"company":{$regex:req.params.key}},
+          {"countryOfManufacture":{$regex:req.params.key}},
+        ]
+      }).populate({path:"category"})
+    res.json(products);
+    }
+    else {
       const products = await Product.find().populate([
         { path: "discount" },
         { path: "category" },
@@ -107,9 +127,9 @@ module.exports.updateProduct = async (req, res, next) => {
 
 // Delete Product
 module.exports.removeProduct = async (req, res, next) => {
-  const { _id } = req.body;
-  try {
-    const deletedProduct = await Product.deleteOne({ _id: _id });
+  const {id} = req.params;
+    try {
+    const deletedProduct = await Product.deleteOne({ _id: id });
     res.send({ msg: "Product deleted", deletedProduct });
   } catch (err) {
     next(err.message);
