@@ -14,7 +14,7 @@ const {
 } = require("../Services/categoryServices");
 const status = express.Router();
 status
-  .route("/Category")
+  .route("/Category/:_id?")
   .get(getAllCategorys)
   .get(getCategoryById)
   .post(validatePostCategory(), createCategory)

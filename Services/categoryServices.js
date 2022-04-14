@@ -3,7 +3,7 @@ module.exports.validatePostCategory = () => {
   return [
     // body("_id").isInt().withMessage("id is required and must be number"),
     body("name").isString().withMessage("name is required and must be alpha"),
-    body("image").optional().isString().withMessage("send your image"),
+    body("image").isString().withMessage("send your image"),
   ];
 };
 
