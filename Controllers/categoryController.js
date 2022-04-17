@@ -10,11 +10,10 @@ exports.getAllCategorys = (request,response,next) => {
       
 }
 exports.getCategoryById = (request,response,next) => {
-    Category.findOne({_id:request.body._id})
+    Category.findOne({_id:request.params._id})
     .then((data)=>{
         response.status(200).json(data)
     }).catch(err=>{next(err)})    
-  
 }
 exports.createCategory=(request,response,next)=>{
      let { name} = request.body;
@@ -30,10 +29,10 @@ exports.createCategory=(request,response,next)=>{
           .catch(error=>next(error +"this is wrong"))    
 }
 exports.updateCategory=(request,response,next)=>{
-    let { name, image} = request.body;
-    Category.updateOne({ _id:request.body._id },{
+    let { name} = request.body;
+    Category.updateOne({ _id:request.params._id },{
         name,
-        image,
+        image:`http://localhost:8080/images/`+request.file.filename
 }
 ).then(data=>{
 if(data.modifiedCount==0)throw new Error("Category not found")

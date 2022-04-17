@@ -14,11 +14,12 @@ const {
 } = require("../Services/categoryServices");
 const status = express.Router();
 status
-  .route("/Category/:_id?")
+  .route("/Category")
   .get(getAllCategorys)
-  .get(getCategoryById)
   .post(validatePostCategory(), createCategory)
-  .put(validatePutCategory(), updateCategory)
-  .delete(validateDeleteCategory(), deleteCategory);
+ status.put("/Category/:_id",validatePutCategory(),updateCategory)
+ status.delete("/Category/:_id",validateDeleteCategory(),deleteCategory)
+ status.get("/Category/:_id",getCategoryById)
+
 
 module.exports = status;

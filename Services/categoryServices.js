@@ -9,7 +9,7 @@ module.exports.validatePostCategory = () => {
 
 module.exports.validatePutCategory = () => {
     return [
-        body("_id").isInt().withMessage("id is required and must be number"),
+        // body("_id").isInt().withMessage("id is required and must be number"),
         body("newCategory.name").isString().withMessage("name is required and must be alpha"),
         body("newCategory.image").optional().isString().withMessage("send your image"),
       ];
