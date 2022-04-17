@@ -73,25 +73,22 @@ module.exports.createProduct = async (req, res, next) => {
   res.json({ msg: 'Product added', productData });
 };
 
-
-// update product
 module.exports.updateProduct = async (req, res, next) => {
   const {
-    _id,
     productName,
     expirationDate,
     company,
     price,
     quantity,
-    image,
     countryOfManufacture,
     description,
-    category,
-    discount,
+   
   } = req.body;
-
+  let category=JSON.parse(req.body.category);
+  let discount=JSON.parse(req.body.discount);
+const id = req.params.id
   try {
-    const product = await Product.findById(_id);
+    const product = await Product.findById(id);
 
     if (!product) res.json({ msg: "no such product" });
 
@@ -100,7 +97,7 @@ module.exports.updateProduct = async (req, res, next) => {
     product.company = company;
     product.price = price;
     product.quantity = quantity;
-    product.image = image;
+    product.image= req.body.image || "http://localhost:8080/images/"+req.file.filename,
     product.description = description;
     product.category = category;
     product.countryOfManufacture = countryOfManufacture;
