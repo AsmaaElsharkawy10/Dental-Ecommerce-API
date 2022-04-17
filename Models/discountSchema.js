@@ -6,8 +6,12 @@ const discountSchema = new mongoose.Schema({
     discountAmount:{type:Number , required:true},
     date:{
         from:{type:Date,required:true},
-        to:  {type:Date,required:true}},
-       
+        to:  {type:Date,required:true}
+    },
+    style:{
+        fontColor:{type:String},
+        layoutColor:{type:String} 
+    }
 });
 
 discountSchema.plugin(AutoIncrement, {inc_field: "discountId" });

@@ -53,8 +53,8 @@ module.exports.updateNotifications = async (req, res, next) => {
   }
 
   const { _id, name, customerId, productId, status, totalPrice, type } =
-    req.body;
-
+    req.body; 
+ 
   try {
     const notification = await Notifications.findById(_id);
 

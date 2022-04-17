@@ -73,9 +73,9 @@ module.exports.updateReceipt= async (req, res, next) => {
 // Delete receipt
 module.exports.removeReceipt= async (req, res, next) => {
  
-  const {id} = req.params;
+  const { _id } = req.body;
   try {
-    const deletedReceipt = await Receipt.deleteOne({ _id: id });
+    const deletedReceipt = await Receipt.deleteOne({ _id: _id });
     res.send({ msg: "Receipt deleted", deletedReceipt });
   } catch (err) {
     next(err.message);

@@ -87,9 +87,9 @@ module.exports.removeOrders = async (req, res, next) => {
       .reduce((current, object) => current + object.msg + ' ', '');
     throw error;
   }
-  const {id} = req.params;
+  const { _id } = req.body;
   try {
-    const deletedOrder = await Orders.deleteOne({ _id: id });
+    const deletedOrder = await Orders.deleteOne({ _id: _id });
     res.send({ msg: 'Order deleted', deletedOrder });
   } catch (err) {
     next(err.message);

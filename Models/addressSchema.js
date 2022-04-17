@@ -10,7 +10,6 @@ addressOwnerId:{type:mongoose.Schema.Types.ObjectId ,required:true}
   
 });
 
-
   //2-register for schema in mongoos
   const Addresses=mongoose.model("Addresses", addressSchema);
   module.exports = Addresses;

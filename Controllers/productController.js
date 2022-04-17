@@ -3,35 +3,23 @@ const Product = require("../Models/productSchema");
 
 //Get all products
 module.exports.getAllProductsOrOne = async (req, res, next) => {
-
   try {
     // check param id sent
-    if (req.params.key) {
+    // const products = await Product.find({
+    //   $or: [
+    //     { productName: { $regex: req.params.key } },
+    //     { company: { $regex: req.params.key } },
+    //     { countryOfManufacture: { $regex: req.params.key } },
+    //   ],
+    // }).populate({ path: 'category' });
 
-      // let param = [
-      //   {
-      //     $lookup:{
-      //       from:"Category",
-      //       localField:"category",
-      //       foreignField:"_id",
-      //       as:"categoryName"
-      //   }
-      // }
-      // ]
-
-      // let products = await Product.aggregate(param)
-      // res.json(products)
-      const products = await Product.find(
-        {
-        "$or":[
-          {"productName":{$regex:req.params.key}},
-          {"company":{$regex:req.params.key}},
-          {"countryOfManufacture":{$regex:req.params.key}},
-        ]
-      }).populate({path:"category"})
-    res.json(products);
-    }
-    else {
+    if (req.params.id) {
+      const product = await Product.findById(req.params.id).populate([
+        { path: "discount" },
+        { path: "category" },
+      ]);
+      res.json(product);
+    } else {
       const products = await Product.find().populate([
         { path: "discount" },
         { path: "category" },
@@ -51,7 +39,7 @@ module.exports.createProduct = async (req, res, next) => {
     error.status = 422;
     error.message = errors
       .array()
-      .reduce((current, object) => current + object.msg + " ", "");
+      .reduce((current, object) => current + object.msg + ' ', '');
     throw error;
   }
   const {
@@ -62,10 +50,10 @@ module.exports.createProduct = async (req, res, next) => {
     quantity,
     countryOfManufacture,
     description,
-    rating
+    rating,
   } = req.body;
-  let category=JSON.parse(req.body.category);
-  let discount=JSON.parse(req.body.discount);
+  let category = JSON.parse(req.body.category);
+  let discount = JSON.parse(req.body.discount);
 
   const newProduct = new Product({
     productName,
@@ -73,16 +61,16 @@ module.exports.createProduct = async (req, res, next) => {
     company,
     price,
     quantity,
-    image: "http://localhost:8080/images/" + req.file.filename,
+    image: 'http://localhost:8080/images/' + req.file.filename,
     countryOfManufacture,
     description,
     category,
     discount,
-    rating
+    rating,
   });
 
   const productData = await newProduct.save();
-  res.json({ msg: "Product added", productData });
+  res.json({ msg: 'Product added', productData });
 };
 
 
@@ -127,11 +115,17 @@ module.exports.updateProduct = async (req, res, next) => {
 
 // Delete Product
 module.exports.removeProduct = async (req, res, next) => {
-  const {id} = req.params;
+  const { id } = req.params;
+  const product = Product.findOne({ _id: id });
+  if (!product) {
+    next('cannot find this product');
+  } else {
     try {
-    const deletedProduct = await Product.deleteOne({ _id: id });
-    res.send({ msg: "Product deleted", deletedProduct });
-  } catch (err) {
-    next(err.message);
+      const deletedProduct = await Product.deleteOne({ _id: id });
+      res.send({ msg: 'Product deleted', deletedProduct });
+    } catch (err) {
+      next(err.message);
+    }
   }
 };
+

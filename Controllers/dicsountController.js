@@ -28,10 +28,11 @@ module.exports.createDiscount = async (req, res, next) => {
           error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
           throw error;
    }
-  const {discountAmount , date } = req.body;
+  const {discountAmount , date ,style} = req.body;
   const newDiscount = new Discount({
     discountAmount,
-    date
+    date,
+    style
   });
 
   const discounttData = await newDiscount.save();
@@ -41,7 +42,7 @@ module.exports.createDiscount = async (req, res, next) => {
 // update receipt
 module.exports.updateDiscount= async (req, res, next) => {
 
-  const {_id,  discountAmount , date } = req.body;
+  const {_id,  discountAmount , date ,style} = req.body;
 
   try {
     const discount = await Discount.findById(_id);
@@ -50,7 +51,7 @@ module.exports.updateDiscount= async (req, res, next) => {
 
     discount.discountAmount = discountAmount ;
     discount.date = date ;
-  
+    discount.style=style;  
    
 
     const updatedDiscount = await discount.save();
@@ -64,8 +65,8 @@ module.exports.updateDiscount= async (req, res, next) => {
 // Delete receipt
 module.exports.removeDiscount= async (req, res, next) => {
  
-  const {id} = req.params;
-    try {
+  const { _id } = req.body;
+  try {
     const deletedDiscount = await Discount.deleteOne({ _id: _id });
     res.send({ msg: "Discount deleted", deletedDiscount });
   } catch (err) {

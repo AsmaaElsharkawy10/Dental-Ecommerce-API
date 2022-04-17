@@ -13,7 +13,7 @@ exports.getAllEmployees = (request, response, next) => {
 };
 
 exports.getEmployeesById = (request, response, next) => {
-  Employees.findOne({ _id: request.params._id })
+  Employees.findOne({ _id: request.body._id })
     .then((data) => {
       response.status(200).json(data);
     })
@@ -109,7 +109,7 @@ exports.updateEmployee = (request, response, next) => {
     .catch((error) => next(error));
 };
 exports.deleteEmployee = (request, response, next) => {
-  Employees.findOneAndDelete({ _id: request.params._id })
+  Employees.findOneAndDelete({ _id: request.body._id })
     .then((data) => {
       if (data.modifiedCount == 0) throw new Error("employee not found");
       response.status(200).json({ message: "deleted", data });

@@ -21,9 +21,7 @@ const customerSchema = new mongoose.Schema({
   myFavorite:[{type:Number, ref:"products"}],
   Orders: [{ type: Number, ref: "Orders" }],
   customerAddresses: [{type:mongoose.Schema.Types.ObjectId ,ref: "Addresses"}],
-
   role: {type:String, enum: ["Doctor", "Merchant"], required: true },
-
 });
 
 

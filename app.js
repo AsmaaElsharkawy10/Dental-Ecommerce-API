@@ -15,15 +15,16 @@ const loginRouter =require('./Routers/authRouter');
 const receiptRouter = require("./Routers/receiptRouter");
 const vendorRouter = require("./Routers/vendorRouter");
 const discountRouter = require("./Routers/discountRouter");
-const employeeRouter=require("./Routers/employeeRouter")
-const flyboyRouter=require("./Routers/flyboyRouters")
-const categoryRouter=require("./Routers/categoryRouter")
-const returnsRouter=require('./Routers/returnsRouter')
-const spoiledRouter=require('./Routers/spoiledRouter')
-const storeRouter=require('./Routers/storeRouter')
+const employeeRouter=require("./Routers/employeeRouter");
+const flyboyRouter=require("./Routers/flyboyRouters");
+const categoryRouter=require("./Routers/categoryRouter");
+const returnsRouter=require('./Routers/returnsRouter');
+const spoiledRouter=require('./Routers/spoiledRouter');
+const storeRouter=require('./Routers/storeRouter');
 const ordersRouter = require("./Routers/ordersRouters");
-const notificationsRouter= require("./Routers/notificationsRouters")
-const productRouter= require("./Routers/productRouter")
+const notificationsRouter= require("./Routers/notificationsRouters");
+const productRouter= require("./Routers/productRouter");
+const favouriteRouter=require('./Routers/favouriteRouter');
 
 
 /*------------------------------- Images-------------------------------*/
@@ -108,8 +109,8 @@ app.use(spoiledRouter);
 app.use(storeRouter);
 app.use(ordersRouter);
 app.use(notificationsRouter);
-app.use(productRouter)
-
+app.use(productRouter);
+app.use(favouriteRouter);
 
 
 //Not found MW
