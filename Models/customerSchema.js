@@ -3,7 +3,7 @@ const { mongoose } = require("mongoose");
 
 const customerSchema = new mongoose.Schema({
   fullName:{type:String,required:true},
-  customerPhone: { type: Number, required: true },
+  customerPhone: { type: String, required: true },
   customerEmail: {
     type: String,
     required: true,
@@ -12,16 +12,14 @@ const customerSchema = new mongoose.Schema({
       "Please enter a valid email",
     ],
   },
-  
-  // image:String,
+  image:String,
   customerPassword: { type: String, required: true },
   confirmPassword:{ type: String, required: false },
-  customerTotalPurchase: { type: Number, required: true },
-  cart:[{type:Number, ref:"products"}],
-  myFavorite:[{type:Number, ref:"products"}],
+  customerTotalPurchase: { type: Number},
   Orders: [{ type: Number, ref: "Orders" }],
-  customerAddresses: [{type:mongoose.Schema.Types.ObjectId ,ref: "Addresses"}],
+  customerAddress:{type:{country:String,city:String,streetName:String,buildingNumber:Number,floorNumber:Number}},
   role: {type:String, enum: ["Doctor", "Merchant"], required: true },
+
 });
 
 
