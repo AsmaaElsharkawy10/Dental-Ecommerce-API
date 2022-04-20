@@ -1,25 +1,15 @@
-const Customers = require("./../Models/customerSchema");
+const Customers = require("../Models/customerSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-module.exports.loginController = async (req, res) => {
+module.exports.loginController = async (req, res,next) => {
   const { email, password } = req.body;
-  const customer = await Customers.findOne({ customerEmail: email }).populate([
-    { path: "customerAddresses" },
-    {
-      path: "cart",
-      populate: { path: "category" },
-      populate: { path: "discount" },
-    },
-    {
-      path: "myFavorite",
-      populate: { path: "category" },
-      populate: { path: "discount" },
-    },
-  ]);
-  if (customer) {
+
+
     try {
+      const customer = await Customers.findOne({ customerEmail: email })
+      if (customer) {
       const validPassword = await bcrypt.compare(
         password,
         customer.customerPassword
@@ -29,8 +19,8 @@ module.exports.loginController = async (req, res) => {
         const token = jwt.sign({ _id: customer._id }, process.env.SECRET);
         res.status(200).json({ login: "success", customer, token: token });
       } else res.status(400).send(`your password is incorrect`);
-    } catch (error) {
-      res.status(400).send(`login error:${error}`);
-    }
+    }else res.status(400).send(`Invalid email`);
+  } catch (error) {
+    res.status(400).send(`login error:${error}`);
   }
 };
