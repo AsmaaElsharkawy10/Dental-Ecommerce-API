@@ -1,7 +1,6 @@
 const Orders = require('../Models/ordersSchema');
 const { validationResult } = require('express-validator');
 
-const bcrypt = require('bcrypt');
 
 module.exports.getAllOrders = async (req, res, next) => {
   try {
@@ -27,16 +26,13 @@ module.exports.createOrders = async (req, res, next) => {
       .reduce((current, object) => current + object.msg + ' ', '');
     throw error;
   }
-  const { _id, customerId, status, addressId, storesId, flyboyId, ordersDate } =
-    req.body;
+  const { _id, customerId, status, ordersDate,receipt } = req.body;
   const newOrder = new Orders({
     _id,
     customerId,
     status,
-    addressId,
-    storesId,
-    flyboyId,
-    ordersDate,
+    receipt,
+    ordersDate
   });
 
   const orderData = await newOrder.save();
@@ -54,19 +50,17 @@ module.exports.updateOrders = async (req, res, next) => {
     throw error;
   }
 
-  const { _id, customerId, status, addressId, storesId, flyboyId, ordersDate } =
-    req.body;
+  const {  customerId, status,receipt, ordersDate } = req.body;
 
   try {
-    const order = await Orders.findById(_id);
+    const {id} = req.params
+    const order = await Orders.findById(id);
 
     if (!order) res.json({ msg: 'no orders' });
 
     order.customerId = customerId;
     order.status = status;
-    order.addressId = addressId;
-    order.storesId = storesId;
-    order.flyboyId = flyboyId;
+    order.receipt = receipt;
     order.ordersDate = ordersDate;
 
     const updatedOrder = await order.save();
@@ -87,9 +81,9 @@ module.exports.removeOrders = async (req, res, next) => {
       .reduce((current, object) => current + object.msg + ' ', '');
     throw error;
   }
-  const { _id } = req.body;
+  const { id } = req.params;
   try {
-    const deletedOrder = await Orders.deleteOne({ _id: _id });
+    const deletedOrder = await Orders.deleteOne({ _id: id });
     res.send({ msg: 'Order deleted', deletedOrder });
   } catch (err) {
     next(err.message);

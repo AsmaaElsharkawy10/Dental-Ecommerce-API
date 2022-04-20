@@ -28,26 +28,34 @@ module.exports.createDiscount = async (req, res, next) => {
           error.message=errors.array().reduce((current,object)=>current+object.msg+" ","")
           throw error;
    }
-  const {discountAmount , date ,style} = req.body;
+  const {discountAmount } = req.body;
+  
+  let date = JSON.parse(req.body.date)
+  let style = JSON.parse(req.body.style)
+
   const newDiscount = new Discount({
     discountAmount,
     date,
     style
   });
 
-  const discounttData = await newDiscount.save();
-  res.json({ msg: "Discount added", discounttData });
+   await newDiscount.save();
+  const discounts = await Discount.find();
+    res.json({ msg: "Discount added", data:discounts });
 }
 
 // update receipt
 module.exports.updateDiscount= async (req, res, next) => {
 
-  const {_id,  discountAmount , date ,style} = req.body;
-
+  const { discountAmount} = req.body;
+  const {id} = req.params
   try {
-    const discount = await Discount.findById(_id);
+    const discount = await Discount.findById(id);
 
     if (!discount) res.json({ msg: "no such discount" });
+
+    let date = JSON.parse(req.body.date)
+    let style = JSON.parse(req.body.style)
 
     discount.discountAmount = discountAmount ;
     discount.date = date ;
