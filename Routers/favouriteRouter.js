@@ -9,7 +9,7 @@ const {
 router.route("/favourite/:id?")
 .get(/*isAuth,*/getFavourites)
 .post(addFavourite)
-.delete(deleteFavourite)
+.put(deleteFavourite)
 
 module.exports = router;
 

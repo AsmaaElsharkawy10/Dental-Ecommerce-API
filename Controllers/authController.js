@@ -9,6 +9,7 @@ module.exports.loginController = async (req, res,next) => {
 
     try {
       const customer = await Customers.findOne({ customerEmail: email })
+
       if (customer) {
       const validPassword = await bcrypt.compare(
         password,
