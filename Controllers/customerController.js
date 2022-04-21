@@ -49,7 +49,7 @@ module.exports = {
           const salt = bcrypt.genSaltSync(10);
           const hashedPassword = bcrypt.hashSync(customerPassword, salt);
           customerPassword = hashedPassword;
-          
+          let customers;
           const customer = new Customers({
             customerPassword,
             customerPhone,
@@ -60,9 +60,13 @@ module.exports = {
             customerTotalPurchase,
             role,
           });
-          customer.save()
+           customer.save()
+                   .then(()=>{
+                    customers = Customers.find({})
+                   })
           .catch(error=>next(error+"cannot add customer")); 
-          res.status(200).json({message:"adedd",customer});                         
+          // res.status(200).json({ msg: "Customer added", data:customers });
+          res.status(200).json({message:"adedd",data:customers});                         
 
   }, //add customer
 
@@ -75,24 +79,24 @@ module.exports = {
       throw error;
     }
     let customerAddress = JSON.parse(req.body.customerAddress)
-    Customers.updateOne({_id:req.params.id}, {
-      $set: {
-        customerPhone: req.body.customerPhone,
+    let updatedCustomer;
+    updatedCustomer = Customers.findOneAndUpdate({_id:req.params.id}, {
+       $set:{ customerPhone: req.body.customerPhone,
         fullName: req.body.fullName,
         image:req.body.image || "http://localhost:8080/images/"+req.file.filename,
         // customerTotalPurchase: req.body.customerTotalPurchase,
         customerAddress:customerAddress,
-        role: req.body.role,
+        role: req.body.role,}
+      
+    }, {new:true},(err,user)=>{
+      if(err){
+        return res.status(400).json({error:'cannot update this customer'})
+      }else{
+        updatedCustomer = user
+        res.status(200).json({ message: "updated", data:updatedCustomer});
       }
     })
-      .then((data) => {
-        if (data == null) throw new Error("cannot update this customer");
-        // fs.unlinkSync(`./../images/${data}`)
-        res.status(200).json({ message: "updated", data });
-      }).catch((error) => next(error));
-    
   },
-
   
   deleteCustomer:async(req,res,next)=>{
     const {id} = req.params;

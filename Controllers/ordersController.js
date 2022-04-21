@@ -8,7 +8,17 @@ module.exports.getAllOrders = async (req, res, next) => {
       const order = await Orders.findById(req.params.id);
       res.json(order);
     } else {
-      const orders = await Orders.find();
+      const orders = await Orders.find().populate([
+        
+        {
+          path: "receipt",
+          populate: [{ path: "products" }],
+          
+        },
+        {
+          path:"customerId"
+        }
+      ]);
       res.json(orders);
     }
   } catch (err) {
@@ -17,39 +27,31 @@ module.exports.getAllOrders = async (req, res, next) => {
 };
 
 module.exports.createOrders = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    let error = new Error();
-    error.status = 422;
-    error.message = errors
-      .array()
-      .reduce((current, object) => current + object.msg + ' ', '');
-    throw error;
-  }
-  const { _id, customerId, status, ordersDate,receipt } = req.body;
+  console.log(req.body)
+  const { cart , id } = req.body;
+  console.log(typeof(id))
+  const array = [];
+  cart.cartItems.map((item)=>{
+    array.push(item._id)
+  })
+  console.log(array)
+ let receipt   =   {total:cart.cartTotalAmount,products:array}
+ let date = new Date()
+ 
+ let orderDate = {requestDate:new Date() , deliverDate: date.setDate(date.getDate() + 3)}
   const newOrder = new Orders({
-    _id,
-    customerId,
-    status,
+    customerId:id,
+    status:req.body.status || "inProgress",
     receipt,
-    ordersDate
+    orderDate
   });
-
   const orderData = await newOrder.save();
-  res.json({ msg: 'orders added', orderData });
+  const orders = await Orders.find()
+  res.json({ msg: 'orders added', data:orders });
 };
 
 module.exports.updateOrders = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    let error = new Error();
-    error.status = 422;
-    error.message = errors
-      .array()
-      .reduce((current, object) => current + object.msg + ' ', '');
-    throw error;
-  }
-
+ 
   const {  customerId, status,receipt, ordersDate } = req.body;
 
   try {
@@ -64,7 +66,7 @@ module.exports.updateOrders = async (req, res, next) => {
     order.ordersDate = ordersDate;
 
     const updatedOrder = await order.save();
-
+    
     res.json({ msg: 'order updated', updatedOrder });
   } catch (err) {
     next(err);
@@ -72,15 +74,7 @@ module.exports.updateOrders = async (req, res, next) => {
 };
 
 module.exports.removeOrders = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    let error = new Error();
-    error.status = 422;
-    error.message = errors
-      .array()
-      .reduce((current, object) => current + object.msg + ' ', '');
-    throw error;
-  }
+
   const { id } = req.params;
   try {
     const deletedOrder = await Orders.deleteOne({ _id: id });

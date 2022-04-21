@@ -3,7 +3,7 @@ const autoIncrement = require("mongoose-sequence")(mongoose);
 
 const ordersSchema = new mongoose.Schema({
   _id: { type: Number, alias: "orderId" },
-  customerId: { type: Number, ref: "Customers", required: true },
+  customerId: { type:mongoose.Schema.Types.ObjectId, ref: "Customers", required: true },
   status: {
     type: String,
     enum: ["inProgress", "completed", "underRevison"],
@@ -11,9 +11,9 @@ const ordersSchema = new mongoose.Schema({
   },
   receipt: {
     total: { type: Number, required: true },
-    products: [[{ type: Number, ref: 'products' }]]
+    products: [{ type: Number, ref: 'products' }]
   },
-  ordersDate: {
+  orderDate: {
     requestDate: { type: Date },
     deliverDate: { type: Date },
   },
