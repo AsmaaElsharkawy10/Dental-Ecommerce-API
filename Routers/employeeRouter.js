@@ -2,23 +2,24 @@ const express = require("express");
 const employeeRouter = express.Router();
 
 const {
-  getAllOrOne,
-  addEmployee,
+  getAllEmployees,
+  getEmployeesById,
+  createEmployee,
   updateEmployee,
   deleteEmployee,
 } = require("../Controllers/employeeController");
 const {
-  validatePostData,
-  validatePutData,
-  validateDeleteData,
+  validatePostEmployee,
+  validatePutEmployee,
+  validateDeleteEmployee,
 } = require("../Services/employeeServices");
 employeeRouter
-  .route("/employee/:id?")
-  .get(getAllOrOne)
- // .get(getEmployeesById)
-  .post(validatePostData(),addEmployee)
-  .put(validatePutData(), updateEmployee)
-  .delete(validateDeleteData(), deleteEmployee);
+  .route("/employee")
+  .get(getAllEmployees)
+  .get(getEmployeesById)
+  .post(validatePostEmployee(), createEmployee)
+  .put(validatePutEmployee(), updateEmployee)
+  .delete(validateDeleteEmployee(), deleteEmployee);
 
 
 module.exports = employeeRouter;

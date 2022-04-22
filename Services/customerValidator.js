@@ -57,11 +57,11 @@ module.exports.validatePostData = () => {
               return Promise.reject("Phone already in use");
             }
           });
-      }).withMessage("please enter valid phone")
+      }).withMessage("please enter valid phone"),
 
     // body("Orders")
     //   .optional()
-    //   .isString().withMessage("select your order"),
+    //   .isNumeric().withMessage("select your order"),
 
 
     // body("customerTotalPurchase")
@@ -109,6 +109,7 @@ module.exports.validatePutData = () => {
       .withMessage("//select your role Merchant or Doctor"),
 
       body("customerPhone").optional().isNumeric().withMessage("please enter valid phone"),
+      body("blackList").optional().isBoolean().withMessage("Black list is boolean")
 
       // body("Orders")
       // .optional()

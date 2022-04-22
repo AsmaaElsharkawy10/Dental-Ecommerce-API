@@ -1,5 +1,6 @@
 const Orders = require('../Models/ordersSchema');
 const { validationResult } = require('express-validator');
+const Customers = require('../Models/customerSchema')
 
 
 module.exports.getAllOrders = async (req, res, next) => {
@@ -29,31 +30,35 @@ module.exports.getAllOrders = async (req, res, next) => {
 module.exports.createOrders = async (req, res, next) => {
   console.log(req.body)
   const { cart , id } = req.body;
-  console.log(typeof(id))
   const array = [];
   cart.cartItems.map((item)=>{
     array.push(item._id)
   })
-  console.log(array)
  let receipt   =   {total:cart.cartTotalAmount,products:array}
  let date = new Date()
- 
  let orderDate = {requestDate:new Date() , deliverDate: date.setDate(date.getDate() + 3)}
+
+ const customer = await Customers.findOne({_id:id})
+console.log(customer)
   const newOrder = new Orders({
     customerId:id,
     status:req.body.status || "inProgress",
     receipt,
     orderDate
   });
+  // console.log(newOrder)
+  
   const orderData = await newOrder.save();
+  customer.Orders.push(orderData._id)
+  await customer.save()
+  // console.log(orderData)
   const orders = await Orders.find()
   res.json({ msg: 'orders added', data:orders });
 };
 
 module.exports.updateOrders = async (req, res, next) => {
+  const { customerId,orderDate,receipt ,status } = req.body;
  
-  const {  customerId, status,receipt, ordersDate } = req.body;
-
   try {
     const {id} = req.params
     const order = await Orders.findById(id);
@@ -63,7 +68,7 @@ module.exports.updateOrders = async (req, res, next) => {
     order.customerId = customerId;
     order.status = status;
     order.receipt = receipt;
-    order.ordersDate = ordersDate;
+    order.ordersDate = orderDate;
 
     const updatedOrder = await order.save();
     

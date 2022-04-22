@@ -61,7 +61,7 @@ module.exports.createProduct = async (req, res, next) => {
     company,
     price,
     quantity,
-    image: 'http://localhost:8080/images/' + req.file.filename,
+    image:req.body.image || 'http://localhost:8080/images/' + req.file.filename,
     countryOfManufacture,
     description,
     category,

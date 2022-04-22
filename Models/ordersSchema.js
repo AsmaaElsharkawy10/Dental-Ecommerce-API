@@ -6,7 +6,7 @@ const ordersSchema = new mongoose.Schema({
   customerId: { type:mongoose.Schema.Types.ObjectId, ref: "Customers", required: true },
   status: {
     type: String,
-    enum: ["inProgress", "completed", "underRevison"],
+    enum: ["inProgress", "Completed", "Rejected", "Confirmed"],
     required: true,
   },
   receipt: {

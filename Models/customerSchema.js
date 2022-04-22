@@ -16,9 +16,10 @@ const customerSchema = new mongoose.Schema({
   customerPassword: { type: String, required: true },
   confirmPassword:{ type: String, required: false },
   customerTotalPurchase: { type: Number},
-  Orders: [{ type: Number, ref: "Orders" }],
+  Orders: [{ type: Number, ref: "orders" }],
   customerAddress:{type:{country:String,city:String,streetName:String,buildingNumber:Number,floorNumber:Number}},
   role: {type:String, enum: ["Doctor", "Merchant"], required: true },
+  blackList:{type:Boolean,required:true,default:false}
 
 });
 

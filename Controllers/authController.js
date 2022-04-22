@@ -6,9 +6,8 @@ require("dotenv").config();
 module.exports.loginController = async (req, res,next) => {
   const { email, password } = req.body;
 
-
     try {
-      const customer = await Customers.findOne({ customerEmail: email })
+      const customer = await Customers.findOne({ customerEmail: email }).populate({path:"Orders"})
 
       if (customer) {
       const validPassword = await bcrypt.compare(
