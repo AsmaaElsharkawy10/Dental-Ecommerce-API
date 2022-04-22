@@ -91,28 +91,23 @@ module.exports.validatePutData = () => {
       body("fullName")
       .isString()
       .withMessage("//name is required and must be alpha"),
-      
-      body("image")
-      .optional()
-      .isString()
-      .withMessage("//Image is required and must be String"),
 
 
-      body("customerAddress")
+      body("address")
       .isString()
       .not()
       .isEmpty()
-      .withMessage("//enter customerAddresses as object not empty"),
+      .withMessage("//enter address as object not empty"),
 
       
       
 
-    body("role")
+    body("gender")
       .isString()
-      .isIn(['Doctor', 'Merchant'])
-      .withMessage("//select your role Merchant or Doctor"),
+      .isIn(['male', 'female'])
+      .withMessage("//select your role male or female"),
 
-      body("customerPhone").optional().isNumeric().withMessage("please enter valid phone"),
+      body("phone").optional().isNumeric().withMessage("please enter valid phone"),
 
       // body("Orders")
       // .optional()

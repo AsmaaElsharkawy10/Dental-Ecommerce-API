@@ -94,11 +94,13 @@ module.exports = {
         $set: {
           phone: req.body.phone,
           fullName: req.body.fullName,
+          workHour: req.body.workHour,
+          militarystatus:req.body.militarystatus,
          // image:
          //   req.body.image ||
          //   'http://localhost:8080/images/' + req.file.filename,
           // customerTotalPurchase: req.body.customerTotalPurchase,
-          address: address,
+          address: req.body.address,
           position: req.body.position,
         },
       },
