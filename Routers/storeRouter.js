@@ -3,18 +3,24 @@ const storeRouter = express.Router();
 
 
 const {
+  getAllStoresOrOne,
+  addStore,
+  updateStore,
+  deleteStore
+} = require("../Controllers/storeController");
+const {
   validatePostData,
   validatePutData,
   validateDeleteData,
 } = require("../Services/storeService");
-const controller = require("./../Controllers/storeController");
+const status = express.Router();
+status
+.route("/stores")
+.get(getAllStoresOrOne)
+  .post(validatePostData(), addStore)
+status.put("/stores/:_id",validatePutData(),updateStore)
+status.delete("/stores/:_id",validateDeleteData(), deleteStore);
 
 
-storeRouter
-  .route("/stores/:id?")
-  .get(controller.getAllStoresOrOne)
-  .post(validatePostData(), controller.addStore)
-  .put(validatePutData(), controller.updateStore)
-  .delete(validateDeleteData(), controller.deleteStore);
+module.exports = status;
 
-module.exports = storeRouter;
