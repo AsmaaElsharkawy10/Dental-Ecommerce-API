@@ -13,7 +13,7 @@ const {
   validateDeleteData,
 } = require("../Services/employeeServices");
 employeeRouter
-  .route("/employee")
+  .route("/employee/:id?")
   .get(getAllOrOne)
  // .get(getEmployeesById)
   .post(validatePostData(),addEmployee)
