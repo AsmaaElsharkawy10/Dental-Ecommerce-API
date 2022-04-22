@@ -70,7 +70,8 @@ module.exports.createProduct = async (req, res, next) => {
   });
 
   const productData = await newProduct.save();
-  res.json({ msg: 'Product added', productData });
+ const product= await Product.find()
+  res.json({ msg: 'Product added',data:product });
 };
 
 module.exports.updateProduct = async (req, res, next) => {
